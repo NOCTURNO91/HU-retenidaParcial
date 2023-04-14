@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<galileo>
+    <config>
+        <config_spring id="contextConfigLocation">
+                <path>/WEB-INF/config/spring/applicationContext.xml</path>
+                <description></description>
+        </config_spring >
+        <config_cache id="configuracion_cache_path">
+                <path>/WEB-INF/config/cache/configuration_cache.xml</path>
+                <description></description>
+        </config_cache>
+        <config_log4j id="configuracion_log4j">
+                <path>/WEB-INF/config/log/log4j.properties</path>
+                <description></description>
+        </config_log4j>
+    </config>
+	
+    <operating_system>
+        <os>WINDOWS</os>
+        <description>Define el sistema operativo sobre el cual corre la aplicacion, solo aplica cuando se instala sobre un servidor de aplicaciones</description>
+    </operating_system>
+	
+    <database>
+        <!-- Seccion que define el nombre del JNDI del datasource a usar -->
+        <datasource>
+            <jndi>dbTCC</jndi>
+            <description></description>
+        </datasource>
+    </database>
+	
+    <!-- Seccion que define el contenedor que usa la aplicación
+        Cuando se coloca desktop, es porque la aplicación esta 
+        sin usar ningun contenedor
+    -->
+
+    <container>
+            <!-- Configuraions id contenedor para tomcat 
+            <id_container>tomcat</id_container> -->
+            <!-- Configuraions id contenedor para weblogic -->
+            <id_container>weblogic</id_container>
+            <desciption></desciption>	
+    </container>
+    <!--
+    Seccion que define la ip a la que se le hara ping para chequear si una tablet tine conexion
+    -->
+    <ping>
+        <ip_ping></ip_ping>
+        <desciption></desciption>
+    </ping>
+</galileo>

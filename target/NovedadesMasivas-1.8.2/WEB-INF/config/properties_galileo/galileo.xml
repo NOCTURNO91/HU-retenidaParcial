@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<galileo>
+	<config>
+		<config_spring id="contextConfigLocation">
+			<path>/WEB-INF/config/spring/applicationContext.xml</path>
+			<description></description>
+		</config_spring >
+		<config_cache id="configuracion_cache_path">
+			<path>/WEB-INF/config/cache/configuration_cache.xml</path>
+			<description></description>
+		</config_cache>
+		<config_log4j id="configuracion_log4j">
+			<path>/WEB-INF/config/log/log4j.properties</path>
+			<description></description>
+		</config_log4j>
+		
+	</config>
+	
+	<!-- Sistema operativo del servidor donde se despliegua la aplicación   -->
+	<operating_system>
+		<os>LINUX</os>
+		<!-- <os>WINDOWS</os> -->
+		<description>Define el sistema operativo sobre el cual corre la aplicacion, solo aplica cuando se instala sobre un servidor de aplicaciones</description>
+	</operating_system>	
+	
+	
+	<database>
+		<!-- Seccion que define el nombre del JNDI del datasource a usar -->
+		<datasource>
+			<jndi>jdbc/Staging</jndi>
+                        <!-- <jndi>jdbc/TCC_MovilidadDMP</jndi> -->
+			<description></description>
+		</datasource>
+		<!-- Seccion que se usa para configurar la conexion a una base de datos local
+		    se usa cuando se esta trabajando con tablet y no hay servidor de aplicaciones
+		 
+
+		<datalocal>
+			<server id="DBLOCAL.server"></server>
+			<sid id ="DBLOCAL.sid"></sid>
+			<user id="DBLOCAL.user"></user>
+			<password id="DBLOCAL.password"></password>
+		</datalocal>
+		-->
+	</database>
+	<!--En esta seccion se definen los endpoint a los que se conecta la aplicación -->
+	<services>
+		<!--
+		<remesas id="galileo.services.remesa.endpoint">
+			<endpoint>http://Qua.servicios.aplicaciones.tcc.com.co:8011/remesa</endpoint>
+			<description></description>
+		</remesas >
+		<ordenesdeservicio id="galileo.services.ordenesservicio.endpoint">
+			<endpoint>http://Qua.servicios.aplicaciones.tcc.com.co:8011/PRLServicio</endpoint>
+			<description></description>
+		</ordenesdeservicio>
+		<clientes id="galileo.services.clientes.endpoint">
+			<endpoint>http://Qua.servicios.aplicaciones.tcc.com.co:8011/cliente</endpoint>
+			<description></description>
+		</clientes>
+		-->
+		<service id="ubicaciones">
+			<endpoint>http://servicios.aplicaciones.tcc.com.co:8011/SeguridadRLS/Seguridad</endpoint>
+			<description></description>
+		</service>
+
+	</services>
+	
+	<!-- Seccion que define el contenedor que usa la aplicación
+	    Cuando se coloca desktop, es porque la aplicación esta 
+	    sin usar ningun contenedor
+	-->
+	
+	<container>
+		<!-- Configuraions id contenedor para tomcat 
+		<id_container>tomcat</id_container> -->
+		<!-- Configuraions id contenedor para weblogic -->
+		<id_container>weblogic</id_container>
+		<desciption></desciption>	
+	</container>
+	<!--
+	Seccion que define la ip a la que se le hara ping para chequear si una tablet tine conexion
+	 
+	 -->
+	<ping>
+		<ip_ping></ip_ping>
+		<desciption></desciption>
+	</ping>
+</galileo>

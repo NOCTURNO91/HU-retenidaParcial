@@ -1,0 +1,47 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cancel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Exportar a Excel</h4>
+    </div>
+    
+    <div class="modal-body">
+        <div class="panel panel-primary">
+            <div class="panel-heading" role="tab">
+                <h2 class="panel-title">
+                    Lista de opciones
+                </h2>
+            </div>
+
+            <div class="panel-body">
+                
+                <div class="row">
+                    <div class="col-sm-3">
+                        Tipo de exportaci&oacute;n
+                    </div>
+                    <div class="col-sm-4">
+                        <ui-select ng-model="opcion.selected" theme="bootstrap" reset-search-input="true">
+                            <ui-select-match allow-clear="true" placeholder="SELECCIONAR">
+                                {{$select.selected.descripcion}}
+                            </ui-select-match>
+                            <ui-select-choices repeat="opcion in listaOpciones | filter: $select.search">
+                                <div ng-bind-html="opcion.descripcion | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="generarExcel()" id="btnGenerar">
+            <span class="glyphicon glyphicon-file"></span> Generar Excel
+        </button>
+        
+        <button class="btn btn-primary" ng-click="cancel()">
+            <span class="glyphicon glyphicon-remove"></span> Cerrar
+        </button>
+    </div>
+</div>

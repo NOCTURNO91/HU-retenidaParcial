@@ -1,0 +1,256 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cancel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Ingreso de novedades por lote</h4>
+    </div>
+
+    <div class="modal-body">
+        <div class="panel panel-primary">
+            <div class="panel-heading" role="tab">
+                <h2 class="panel-title">
+                    Ingreso
+                </h2>
+            </div>
+
+            <div class="panel-body">
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        Novedad principal *
+                        <ui-select ng-model="paramsIngreso.novedadPpal.selected" theme="bootstrap" reset-search-input="true" on-select="obtenerComplementosNovedad()">
+                            <ui-select-match allow-clear="true" placeholder="SELECCIONAR">
+                                {{$select.selected.descripcion}}
+                            </ui-select-match>
+                            <ui-select-choices repeat="novedadPpal in listaNovedadesPpales | filter: $select.search">
+                                <div ng-bind-html="novedadPpal.descripcion | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        Complemento novedad *
+                        <ui-select ng-model="paramsIngreso.complementoNovedad.selected" theme="bootstrap" reset-search-input="true" on-select="validarSolucionAutomatica($item)">
+                            <ui-select-match allow-clear="true" placeholder="SELECCIONAR">
+                                {{$select.selected.descripcion}}
+                            </ui-select-match>
+                            <ui-select-choices repeat="complementoNovedad in listaComplementosNovedad | filter: $select.search">
+                                <div ng-bind-html="complementoNovedad.descripcion | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+                
+                <!-- HU:12772  @DATE:23/08/2021  @Author:Manuel Gallardo -- Softcaribbean --> 
+                <div class="row" ng-show="showListaJustificacionNovedad"> 
+                    <div class="col-sm-12"> 
+                        Justificaci&oacute;n del planteamiento de la novedad*
+                        <ui-select ng-model="paramsIngreso.justificacionNovedad.selected" theme="bootstrap" reset-search-input="true" on-select = "guardarValorJustificacioNovedad()"> 
+                            <ui-select-match allow-clear="true" placeholder="SELECCIONAR"> 
+                                {{$select.selected.liva_descripcion}} 
+                            </ui-select-match> 
+                            <ui-select-choices repeat="justificacionNovedad in listaJustificacionNovedad | filter: $select.search"> 
+                                <div ng-bind-html="justificacionNovedad.liva_descripcion | highlight: $select.search"></div> 
+                            </ui-select-choices> 
+                        </ui-select> 
+                    </div> 
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        Observaciones (M&iacute;nimo {{minCaracteresObs}} caracteres) *
+                        <textarea class="form-control" ng-model="paramsIngreso.observaciones" maxlength="495"></textarea>
+                        <div class="text-right">
+                            Caracteres: <strong>{{paramsIngreso.observaciones.length}}</strong>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="container my-5" id="IUP_RETENIDAS" ng-show="isvisibleIup">
+                    <span class="btn-text textoIUP">IUP RETENIDAS</span>
+                    <input type="text" id="html" name="Buscar" class="buscar" required='' placeholder="Buscar">
+                    <div class="select-btn marco">
+                        <div class="prueba">
+                            <input type="checkbox" ng-click="checkIUP(0,value)" ng-model="mensaje.todo" >
+                            <label for="vehicle1">Seleccionar todo</label><br>
+                            <input type="checkbox" ng-click="checkIUP(1,value)" ng-model="mensaje.uno">
+                            <label for="vehicle1"> TCCDA000345789</label><br>
+                            <input type="checkbox" ng-click="checkIUP(2,value)" ng-model="mensaje.dos">
+                            <label for="vehicle1">TCCDA000345790</label><br>
+                            <input type="checkbox" ng-click="checkIUP(3, value)" ng-model="mensaje.tres">
+                            <label for="vehicle1">TCCDA000345791</label><br>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-4">
+                        Fecha de planteamiento en sistema
+                        <div class="input-group">
+                            <input type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy HH:mm" ng-model="paramsIngreso.fechaNovedad" is-open="paramsIngreso.isOpenFechaNovedad" datepicker-options="dateOptions" clear-text="{{datePicker.clearText}}" close-text="{{datePicker.closeText}}"
+                                current-text="{{datePicker.currentText}}" ng-disabled="true" />
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-disabled="true">
+                                    <i class="glyphicon glyphicon-calendar"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-4">
+                        Fecha de planteamiento de novedad
+                        <div class="input-group">
+                            <input type="text" ng-change='validarDiasHabilesFechaReal()' class="form-control" disabled uib-datepicker-popup="{{format}}" ng-model="paramsIngreso.fechaRealNovedad" is-open="paramsIngreso.isOpenFechaRealNovedad" datepicker-options="dateOptions" clear-text="{{datePicker.clearText}}" close-text="{{datePicker.closeText}}"
+                                current-text="{{datePicker.currentText}}" ng-disabled="!paramsIngreso.isOpenFechaRealNovedad || desactivarFechaReal" ng-focus="preventFechaNovedadFocus()"  />
+                            <span class="input-group-btn">
+                                <button  ng-disabled="desactivarFechaReal" type="button" class="btn btn-default" ng-click="openFechaNovedad()">
+                                    <i class="glyphicon glyphicon-calendar"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        Unidades con novedad *
+                        <table style="width: 100%;">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <input type="text" class="form-control" ng-model="contador" maxlength="4" ng-disabled="numRemesas > 1">
+                                    </td>
+                                    <td class="text-center" style="width: 10%;">
+                                        de
+                                    </td>
+                                    <td>
+                                        <div style="width: 90%;">
+                                            <input type="text" class="form-control" ng-model="paramsIngreso.totalUnidades" ng-disabled="true">
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-if="solucionAutomatica === true">
+            <div class="row text-danger">
+                <div class="col-sm-12">
+                    <strong>
+                        Esta novedad tine soluci&oacute;n autom&aacute;tica.
+                    </strong>
+                </div>
+
+            </div>
+        </div>
+        <div ng-if="solucionAutomatica === false">
+            <div class="panel panel-primary">
+                <div class="panel-heading" role="tab">
+                    <h2 class="panel-title">
+                        Soluci&oacute;n a novedades
+                    </h2>
+                </div>
+
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            Tipo soluci&oacute;n
+                            <ui-select id="cbxTipoSolucion" ng-model="solucion.tipoSolucion.selected" theme="bootstrap" reset-search-input="true" on-select="validarSeleccionTipoSolucion()">
+                                <ui-select-match allow-clear="true" placeholder="SELECCIONAR">
+                                    {{$select.selected.liva_descripcion}}
+                                </ui-select-match>
+                                <ui-select-choices repeat="tipoSolucion in listaTipoSolucion | filter: $select.search">
+                                    <div ng-bind-html="tipoSolucion.liva_descripcion | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+
+                    <br>
+                    <div class="row" ng-if="numRemesas === 1" style="margin-right: 1%;">
+                        <div class="col-sm-2">
+                            N&uacute;mero remesa<br>
+                            <span class="label label-warning" style="font-size: 11pt;">
+                                {{remesa.numRemesa}}
+                            </span>
+                        </div>
+                        <div class="col-sm-3">
+                            Unidad de negocio<br>
+                            <span class="label label-warning" style="font-size: 11pt;">
+                                {{remesa.unidadNegocio}}
+                            </span>
+                        </div>
+                        <div class="col-sm-2">
+                            Fecha remesa<br>
+                            <span class="label label-warning" style="font-size: 11pt;">
+                                {{remesa.fechaRemesa}}
+                            </span>
+                        </div>
+                        <div class="col-sm-3">
+                            Estado remesa<br>
+                            <span class="label label-warning" style="font-size: 11pt;">
+                                {{remesa.estadoRemesa}}
+                            </span>
+                        </div>
+                        <div class="col-sm-2">
+                            Estado novedad<br>
+                            <span class="label label-warning" style="font-size: 11pt;">
+                                {{remesa.estadoNovedad}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div ng-include="'app/novedadesmasivas/partial-solucion-masiva.html'"></div>
+            </div>
+
+            <div style="position: relative; left: 5px;">
+                <div class="checkbox checkbox-danger">
+                    <input type="checkbox" id="chkEjecucionAutomatica" ng-disabled="!habilitarEjecAutomatica" ng-click="chkEjecucionAutomaticaClick()" ng-checked="paramsIngreso.ejecucionAutomatica">
+                    <label for="chkEjecucionAutomatica">
+                        Ejecuci&oacute;n autom&aacute;tica
+                    </label>
+                </div>
+            </div>
+
+            <div class="row" style="position: relative; left: 1%;" ng-show="paramsIngreso.ejecucionAutomatica">
+                <div class="col-sm-6">
+                    Causal de novedad
+                    <ui-select ng-model="paramsIngreso.causalNovedad.selected" theme="bootstrap" reset-search-input="true">
+                        <ui-select-match allow-clear="true" placeholder="SELECCIONAR">
+                            {{$select.selected.liva_descripcion}}
+                        </ui-select-match>
+                        <ui-select-choices repeat="causalNovedad in listaCausalesNovedad | filter: $select.search">
+                            <div ng-bind-html="causalNovedad.liva_descripcion | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+
+            <div class="row" style="position: relative; left: 1%; padding-right: 2%;" ng-show="paramsIngreso.ejecucionAutomatica">
+                <div class="col-sm-12">
+                    Motivo ejecuci&oacute;n
+                    <textarea class="form-control" ng-model="paramsIngreso.motivoEjecucion" maxlength="495"></textarea>
+                    <div class="text-right">
+                        Caracteres: <strong>{{paramsIngreso.motivoEjecucion.length}}</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+
+        <button class="btn btn-primary" ng-click="grabar();">
+            <span class="glyphicon glyphicon-ok"></span> Grabar
+        </button>
+
+        <button class="btn btn-primary" ng-click="cancel()">
+            <span class="glyphicon glyphicon-remove"></span> Cerrar
+        </button>
+    </div>
+</div>

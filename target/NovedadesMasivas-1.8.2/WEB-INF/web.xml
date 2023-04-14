@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+    <display-name>NovedadesMasivas</display-name>
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+        <welcome-file>index.htm</welcome-file>
+        <welcome-file>index.jsp</welcome-file>
+        <welcome-file>default.html</welcome-file>
+        <welcome-file>default.htm</welcome-file>
+        <welcome-file>default.jsp</welcome-file>
+    </welcome-file-list>
+    
+    <context-param>
+        <param-name>properties_galileo</param-name>
+        <param-value>/WEB-INF/config/properties_galileo/galileo.xml</param-value>
+    </context-param>
+    
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/WEB-INF/rest-servlet.xml</param-value>
+    </context-param>
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+	
+    <servlet>
+        <servlet-name>rest</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>rest</servlet-name>
+        <url-pattern>/rest/*</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <description></description>
+        <display-name>InitProperties</display-name>
+        <servlet-name>InitProperties</servlet-name>
+        <servlet-class>galileo.base.init.server.InitProperties</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <description></description>
+        <display-name>InitAdmonLog</display-name>
+        <servlet-name>InitAdmonLog</servlet-name>
+        <servlet-class>galileo.base.init.server.InitAdmonLog</servlet-class>
+        <load-on-startup>3</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <description></description>
+        <display-name>InitSpring</display-name>
+        <servlet-name>InitSpring</servlet-name>
+        <servlet-class>galileo.base.init.server.InitSpring</servlet-class>
+        <load-on-startup>4</load-on-startup>
+    </servlet>
+    
+    <security-constraint>
+        <display-name>SecurityConstraint</display-name>
+        <web-resource-collection>
+            <web-resource-name>Todas</web-resource-name>
+            <url-pattern>/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>geopser</role-name>
+        </auth-constraint>
+        <user-data-constraint>
+            <transport-guarantee>NONE</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
+  
+    <login-config>
+        <auth-method>BASIC</auth-method>
+    </login-config>
+  
+    <security-role>
+        <role-name>geopser</role-name>
+    </security-role>
+    
+</web-app>

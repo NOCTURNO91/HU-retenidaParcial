@@ -1,0 +1,58 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cancel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Imprimir r&oacute;tulos</h4>
+    </div>
+    
+    <div class="modal-body">
+        <div class="panel panel-primary">
+            <div class="panel-heading" role="tab">
+                <h2 class="panel-title">
+                    Lista de formatos
+                </h2>
+            </div>
+
+            <div class="panel-body">
+                
+                <div ng-repeat="(unneDescripcion, objTiun) in listaFormatos" class="panel panel-primary">
+                    <div class="panel-heading" role="tab">
+                        <h2 class="panel-title">
+                            R&oacute;tulos {{unneDescripcion}}
+                        </h2>
+                    </div>
+                    
+                    <div class="panel-body">
+                        <div ng-repeat="(tiunDescripcion, arrRotulos) in objTiun" class="row">
+                            <div class="col-sm-4">
+                                {{tiunDescripcion}}
+                            </div>
+                            <div class="col-sm-4">
+                                <ui-select ng-model="rotulosSel[unneDescripcion][tiunDescripcion].selected" theme="bootstrap" reset-search-input="true">
+                                    <ui-select-match allow-clear="true" placeholder="SELECCIONAR">
+                                        {{$select.selected.rotuDescripcion}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="rotulo in arrRotulos | filter: $select.search">
+                                        <div ng-bind-html="rotulo.rotuDescripcion | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <br><br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="generarRotulos()">
+            <span class="glyphicon glyphicon-file"></span> Generar r&oacute;tulos
+        </button>
+        
+        <button class="btn btn-primary" ng-click="cancel()">
+            <span class="glyphicon glyphicon-remove"></span> Cerrar
+        </button>
+    </div>
+</div>

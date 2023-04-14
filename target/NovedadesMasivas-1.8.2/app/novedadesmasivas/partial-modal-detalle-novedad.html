@@ -1,0 +1,385 @@
+<div class="modal-content">
+    
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cancel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Detalle de novedad. C&oacute;digo: {{remesa.consecutivoNovedad}} - Remesa: {{remesa.numRemesa}} - UEN: {{remesa.unidadNegocio}}</h4>
+    </div>
+
+    <div class="modal-body">
+        <uib-accordion close-others="false">
+            <div uib-accordion-group class="panel-primary" is-open="true" heading="Informaci&oacute;n de remesa">
+                <div class="row">
+                    <div class="col-sm-2">
+                        Unidad de negocio
+                        <input type="text" class="input-sm form-control" ng-model="remesa.unidadNegocio" ng-disabled="true">
+                    </div>
+                    <div class="col-sm-3">
+                        N&uacute;mero remesa
+                        <input type="text" class="input-sm form-control" ng-model="remesa.numRemesa" ng-disabled="true">
+                    </div>
+                    <div class="col-sm-2">
+                        Fecha remesa
+                        <input type="text" class="input-sm form-control" ng-model="remesa.fechaRemesa" ng-disabled="true">
+                    </div>
+                    <div class="col-sm-2">
+                        Estado remesa
+                        <input type="text" class="input-sm form-control" ng-model="remesa.estadoRemesa" ng-disabled="true">
+                    </div>
+                    <div class="col-sm-3">
+                        Tipo servicio operativo
+                        <input type="text" class="input-sm form-control" ng-model="remesa.tipoServicioOperativo" ng-disabled="true"> 
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-5">
+                        Remitente
+                        <input type="text" class="input-sm form-control" ng-model="remesa.nombreRemitente" ng-disabled="true">
+                    </div>
+                    <div class="col-sm-2">
+                        Tel. remitente
+                        <input type="text" class="input-sm form-control" ng-model="remesa.telefonoRemitente" ng-disabled="true">
+                    </div>
+                    <div class="col-sm-2">
+                        Ciudad origen
+                        <input type="text" class="input-sm form-control" ng-model="remesa.ciudadOrigen" ng-disabled="true">
+                    </div>
+                    <div class="col-sm-3">
+                        Direcci&oacute;n origen
+                        <input type="text" class="input-sm form-control" ng-model="remesa.direccionRemitente" ng-disabled="true">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-5">
+                        Destinatario
+                        <input type="text" class="input-sm form-control" ng-model="remesa.nombreDestinatario" ng-disabled="true">
+                    </div>
+                    <div class="col-sm-2">
+                        Tel. destinatario
+                        <input type="text" class="input-sm form-control" ng-model="remesa.telefonoDestinatario" ng-disabled="true">
+                    </div>
+                    <div class="col-sm-2">
+                        Ciudad destino
+                        <input type="text" class="input-sm form-control" ng-model="remesa.ciudadDestino" ng-disabled="true">
+                    </div>
+                    <div class="col-sm-3">
+                        Direcci&oacute;n destino
+                        <input type="text" class="input-sm form-control" ng-model="remesa.direccionDestinatario" ng-disabled="true">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-3">
+                        Forma de pago remesa
+                        <input type="text" class="input-sm form-control" ng-disabled="true" ng-model="remesa.formaPago">
+                    </div>
+                    <div class="col-sm-3">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div style="width: 95%;">
+                                            Unidades
+                                            <input type="text" class="input-sm form-control" ng-model="remesa.unidadesRemesa" ng-disabled="true">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style="width: 95%;">
+                                            Peso real
+                                            <input type="text" class="input-sm form-control" ng-model="remesa.pesoReal" ng-disabled="true">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style="width: 95%;">
+                                            Peso vol.
+                                            <input type="text" class="input-sm form-control" ng-model="remesa.pesoVolumen" ng-disabled="true">
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-sm-6">
+                        Cuenta remesa
+                        <input type="text" class="input-sm form-control" ng-model="remesa.cuentaReme" ng-disabled="true">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-5">
+                        Observaciones remesa
+                        <textarea rows="2" class="input-sm form-control" ng-model="remesa.observacionesRemesa" ng-disabled="true"></textarea>
+                    </div>
+                    <div class="col-sm-2">
+                        Valor mercanc&iacute;a
+                        <input type="text" class="input-sm form-control" ng-disabled="true" ng-model="remesa.valorMercancia">
+                    </div>
+                    <div class="col-sm-2">
+                        Valor despacho
+                        <input type="text" class="input-sm form-control" ng-disabled="true" ng-model="remesa.valorDespacho">
+                    </div>
+                </div>
+            </div>
+        </uib-accordion>
+        
+        
+        <!-- INFORMACIÓN NOVEDAD -->
+        
+
+        <uib-accordion close-others="false">
+            <div uib-accordion-group class="panel-primary" is-open="true" heading="Informaci&oacute;n de la novedad. C&oacute;digo: {{remesa.consecutivoNovedad}} - Remesa: {{remesa.numRemesa}} - UEN: {{remesa.unidadNegocio}}">
+                <div class="row">
+                    <div class="col-sm-4">
+                        Novedad principal
+                        <input type="text" class="input-sm form-control" ng-model="remesa.grupoNovedad" ng-disabled="true">
+                    </div>
+                    
+                    <div class="col-sm-3">
+                        Fecha novedad
+                        <input type="text" class="input-sm form-control" ng-model="remesa.fechaNovedad" ng-disabled="true">
+                    </div>
+                    
+                    <div class="col-sm-2">
+                        Consecutivo novedad
+                        <input type="text" class="input-sm form-control" ng-disabled="true" ng-model="remesa.consecutivoNovedad">
+                    </div>
+                    
+                    <div class="col-sm-3">
+                        <table style="width: 100%;">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        Nro. seguimientos
+                                        <input type="text" class="input-sm form-control" ng-disabled="true" ng-model="remesa.numeroSeguimientos">
+                                    </td>
+                                    
+                                    <td>&nbsp;&nbsp;&nbsp;</td>
+                                    
+                                    <td>
+                                        Unds. con novedad
+                                        <input type="text" class="input-sm form-control" ng-disabled="true" ng-model="remesa.unidadesConNovedad">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-4">
+                        Complemento novedad
+                        <input type="text" class="input-sm form-control" ng-disabled="true" ng-model="remesa.novedadComplemento">
+                    </div>
+                    
+                    <div class="col-sm-3">
+                        CeOp plantea
+                        <input type="text" class="input-sm form-control" ng-model="remesa.nombreCeOpReporta" ng-disabled="true">
+                    </div>
+                    
+                    <div class="col-sm-2">
+                        Canal plantea
+                        <input type="text" class="input-sm form-control" ng-disabled="true" ng-model="remesa.canalPlantea">
+                    </div>
+                    
+                    <div class="col-sm-3">
+                        Usuario plantea
+                        <input type="text" class="input-sm form-control" ng-model="remesa.usuarioPlantea" ng-disabled="true">
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-sm-4">
+                        Observaciones novedad
+                        <textarea rows="2" class="input-sm form-control" ng-disabled="true" ng-model="remesa.observacionesNovedad"></textarea>
+                    </div>
+                    <div class="col-sm-3">
+                        Proceso
+                        <input type="text" class="input-sm form-control" ng-disabled="true" ng-model="remesa.nombreProceso">
+                    </div>
+                    <div class="col-sm-2">
+                        Prioridad
+                        <input type="text" class="input-sm form-control" ng-model="remesa.descPrioridad" ng-disabled="true">
+                    </div>
+                    <div class="col-sm-3">
+                        Atribuible a
+                        <input type="text" class="input-sm form-control" ng-model="remesa.imputabilidad" ng-disabled="true">
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-sm-4">
+                        Soluci&oacute;n novedad
+                        <textarea rows="2" class="input-sm form-control" ng-disabled="true" ng-model="remesa.solucionNovedad"></textarea>
+                    </div>
+                    <div class="col-sm-3">
+                        CeOp soluciona
+                        <input type="text" class="input-sm form-control" ng-model="remesa.ceOpSoluciona" ng-disabled="true">
+                    </div>
+                    <div class="col-sm-2">
+                        Fecha soluci&oacute;n
+                        <input type="text" class="input-sm form-control" ng-model="remesa.fechaFinSolucion" ng-disabled="true">
+                    </div>
+                    <div class="col-sm-3">
+                        Usuario soluci&oacute;n
+                        <input type="text" class="input-sm form-control" ng-disabled="true" ng-model="remesa.usuarioSoluciona">
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-sm-4">
+                        Cliente soluciona
+                        <input type="text" class="input-sm form-control" ng-disabled="true" ng-model="remesa.clienteSoluciona">
+                    </div>
+                    
+                    <div class="col-sm-3">
+                        Tipo soluci&oacute;n
+                        <input type="text" class="input-sm form-control" ng-disabled="true" ng-model="remesa.descTipoSolucion">
+                    </div>
+                    
+                    <div class="col-sm-2">
+                        Canal soluci&oacute;n
+                        <input type="text" class="input-sm form-control" ng-disabled="true" ng-model="remesa.canalSoluciona">
+                    </div>
+                    
+                    <div class="col-sm-3">
+                        Tipo remesa soluci&oacute;n
+                        <input type="text" class="input-sm form-control" ng-model="remesa.tipoRemesaSolucion" ng-disabled="true">
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-sm-4">
+                        &Uacute;ltimo seguimiento
+                        <textarea rows="2" class="input-sm form-control" ng-disabled="true" ng-model="remesa.ultimoSeguimiento"></textarea>
+                    </div>
+                    <div class="col-sm-3">
+                        CeOp &uacute;ltimo seguimiento
+                        <input type="text" class="input-sm form-control" ng-disabled="true" ng-model="remesa.ceOpUltimoSeguimiento">
+                    </div>
+                    <div class="col-sm-2">
+                        Fe. &uacute;ltimo seguimiento
+                        <input type="text" class="input-sm form-control" ng-disabled="true" ng-model="remesa.fechaUltimoSeguimiento">
+                    </div>
+                    <div class="col-sm-3">
+                        Nro. remesa soluci&oacute;n
+                        <input type="text" class="input-sm form-control" ng-disabled="true" ng-model="remesa.numRemesaSolucion">
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-sm-4">
+                        Observaciones ejecuci&oacute;n
+                        <textarea rows="2" class="input-sm form-control" ng-disabled="true" ng-model="remesa.canoObservEjecucion"></textarea>
+                    </div>
+                    
+                    <div class="col-sm-3">
+                        CeOp ejecuta
+                        <input type="text" class="input-sm form-control" ng-disabled="true" ng-model="remesa.nombreCeOpEjecuta">
+                    </div>
+                    
+                    <div class="col-sm-2">
+                        Fecha ejecuci&oacute;n
+                        <input type="text" class="input-sm form-control" ng-disabled="true" ng-model="remesa.fechaEjecucion">
+                    </div>
+                    
+                    <div class="col-sm-3">
+                        Usuario ejecuta
+                        <input type="text" class="input-sm form-control" ng-disabled="true" ng-model="remesa.usuarioEjecucion">
+                    </div>
+                </div>
+                
+                <!-- 
+                <div class="row">
+                    <div class="col-sm-2">
+                        CeOp Anulaci&oacute;n
+                        <input type="text" class="input-sm form-control" ng-disabled="true" ng-model="remesa.ceOpAnulacion">
+                    </div>
+                    <div class="col-sm-2">
+                        Fecha Anulaci&oacute;n
+                        <input type="text" class="input-sm form-control" ng-model="remesa.fechaAnulacion" ng-disabled="true">
+                    </div>
+                    <div class="col-sm-3">
+                        Usuario anulaci&oacute;n
+                        <input type="text" class="input-sm form-control" ng-disabled="true" ng-model="remesa.usuarioAnulacion">
+                    </div>
+                </div>
+                -->
+                
+                <div class="row">
+                    <div class="col-sm-4 text-center">
+                        <br>
+                        <span class="label label-info" style="font-size: 25pt;">
+                            {{remesa.estadoNovedad}}
+                        </span>
+                    </div>
+                    
+                    <div class="col-sm-3">
+                        Causal novedad
+                        <input type="text" class="input-sm form-control" ng-disabled="true" ng-model="remesa.descCausalNov">
+                    </div>
+                    
+                    <div class="col-sm-2">
+                        Fecha ofrecimiento
+                        <input type="text" class="input-sm form-control" ng-disabled="true" ng-model="remesa.fechaFinReofrecimiento">
+                    </div>
+                    
+                    <div class="col-sm-3">
+                        Cierre por procedimiento
+                        <input type="text" class="input-sm form-control" ng-disabled="true" ng-model="remesa.cierrePorProcedimiento">
+                    </div>
+                </div>
+                <br>
+            </div>
+        </uib-accordion>
+    </div>
+    
+    <div class="modal-footer">
+        <table style="width: 100%;">
+            <tbody>
+                <tr>
+                    <td style="width: 48%;" class="text-right">
+                        <!--
+                        <button class="btn btn-xs btn-danger glyphicon glyphicon-arrow-left" ng-click="obtenerAnterior();"></button>
+                        &nbsp;
+                        Novedad {{numNovedad}} de {{totalNovedades}}
+                        &nbsp;
+                        <button class="btn btn-xs btn-danger glyphicon glyphicon-arrow-right" ng-click="obtenerSiguiente();"></button>
+                        -->
+                    </td>
+                    
+                    <td style="width: 48%;" class="text-right">
+                        
+                        <button class="btn {{ remesa.tieneNovedadUnidad === true ? 'btn-danger' : 'btn-info' }}"
+                                title="Ver unidades." ng-click="verUnidades(remesa)"
+                                ng-if="botones.btnVerUnidadesGrid === true">
+                            <span class="glyphicon glyphicon-duplicate"></span>
+                        </button>
+                        
+                        <button class="btn btn-danger" title="Ver documentos del cliente."
+                                ng-click="verDocumentosCliente(remesa)"
+                                ng-if="botones.btnVerDocumentosClienteGrid === true">
+                            <span class="glyphicon glyphicon-folder-open"></span>
+                        </button>
+                        
+                        <button ng-disabled="remesa.cumplido === 'N'" class="btn btn-success"
+                                title="Ver cumplido." ng-click="verCertificado(remesa)"
+                                ng-if="botones.btnVerCumplidoRemesaGrid === true">
+                            <span class="glyphicon glyphicon-camera"></span>
+                        </button>
+                    </td>
+                    
+                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    
+                    <td class="text-right">
+                        <button id="btnCerrarModal" class="btn btn-primary" ng-click="cancel()">
+                            <span class="glyphicon glyphicon-remove"></span> Cerrar
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,22 @@
+<div class="modal-content">
+    <div class="modal-header">
+    </div>
+    <div class="modal-body">
+        <div ng-if="mensaje">
+            <p>
+                {{mensaje}}
+            </p>
+        </div>
+        
+        <div ng-if="objMensaje">
+            <ul>
+                <li ng-repeat="msj in objMensaje">{{msj}}</li>
+            </ul>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="aceptar()">
+            <span class="glyphicon glyphicon-ok-circle"></span> Aceptar
+        </button>
+    </div>
+</div>

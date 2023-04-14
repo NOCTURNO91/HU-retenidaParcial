@@ -1,0 +1,1487 @@
+<div ng-controller="novedadesMasivasController">
+    
+    <script type="text/ng-template" id="btn.unidades.html">
+        
+        <div class="text-center top-row">
+            <button class="btn btn-xs {{ row.entity.tieneNovedadUnidad === true ? 'btn-danger' : 'btn-info' }}"
+                    title="Ver unidades." ng-click="grid.appScope.verUnidades(row.entity)">
+                <span class="glyphicon glyphicon-duplicate"></span>
+            </button>
+        </div>
+    </script>
+    
+    <script type="text/ng-template" id="btn.documentoscliente.html">
+        
+        <div class="text text-center top-row">
+        
+            <button class="btn btn-xs btn-danger" title="Ver documentos del cliente."
+                    ng-click="grid.appScope.verDocumentosCliente(row.entity)">
+                <span class="glyphicon glyphicon-folder-open"></span>
+            </button>
+            
+        </div>
+        
+    </script>
+    
+    <script type="text/ng-template" id="btn.novedades.html">
+        
+        <div class="text text-center top-row">
+            
+            <button class="btn btn-xs btn-warning" title="Ver novedades de la remesa."
+                    ng-click="grid.appScope.abrirDetalleNovedad( $index, row.entity );"
+                    ng-disabled="!row.entity.tieneNovedad"> 
+                <span class="glyphicon glyphicon-warning-sign"></span>
+            </button>
+            
+        </div>
+        
+    </script>
+    
+    <script type="text/ng-template" id="btn.cumplido.html">
+        
+        <div class="text text-center top-row">
+            
+            <button ng-disabled="row.entity.cumplido === 'N'"
+                    class="btn btn-xs btn-success" uib-tooltip="Ver cumplido."
+                    ng-click="grid.appScope.verCertificado( row.entity )">
+                <span class="glyphicon glyphicon-camera"></span>
+            </button>
+            
+        </div>
+        
+    </script>
+    
+    <!--ng-change="grid.appScope.seleccionarRemesa(row.entity)"-->
+    <script type="text/ng-template" id="check.template.html">
+        
+        <div class="text-center">
+            <div ng-class="{'checkbox checkbox-warning': 1 === 1}">
+                <input type="checkbox" id="chk-{{row.entity.pos}}" ng-model="row.entity.selected"
+                    ng-change="grid.appScope.setSeleccionarUno(row.entity.selected)">
+                <label for="chk-{{row.entity.pos}}"></label>
+            </div>
+        </div>
+        
+    </script>
+    
+    <script type="text/ng-template" id="seltodos.template.html">
+        
+        <div class="text-center">
+            <div ng-class="{'checkbox checkbox-warning': 1 === 1}">
+                <input type="checkbox" id="chk-enc" ng-model="_seleccionarTodasRemesas"
+                       ng-change="grid.appScope.setSeleccionarTodosServicios(_seleccionarTodasRemesas)">
+                <label for="chk-enc"></label>
+            </div>
+        </div>
+        
+    </script>
+    
+    
+    <div class="panel panel-primary">
+        <div class="panel-heading" role="tab">
+            <h2 class="panel-title">
+                Novedades masivas
+            </h2>
+        </div>
+
+        <div class="panel-body">
+            
+            <div class="panel panel-primary" style="background:rgba(220,220,220,0.2);">
+                <div class="panel-heading" role="tab" id="headingOne">
+                    <h3 class="panel-title">
+                        <a style="cursor: pointer; cursor: hand;" data-toggle="collapse" data-parent="#accordion"
+                           data-target="#collapseParamConsulta" aria-expanded="true" aria-controls="collapseParamConsulta"> 
+                            <span class="glyphicon glyphicon-pushpin"></span> Par&aacute;metros de consulta
+                        </a>
+                    </h3>
+                </div>
+                
+                <div id="collapseParamConsulta" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                Unidad de negocio *
+                                <ui-select id="cbxUnne" multiple ng-model="unidadNegocio.selected" theme="bootstrap" reset-search-input="true"
+                                           on-select="obtenerTiposServicioOperativo()"
+                               on-remove="obtenerTiposServicioOperativo()"
+                                           >
+                                    <ui-select-match allow-clear="true" placeholder="SELECCIONAR">
+                                        {{$item.descripcion}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="unidadNegocio in listaUnidadesNegocio | filter: $select.search track by unidadNegocio.idInt">
+                                        <div ng-bind-html="unidadNegocio.descripcion | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+
+                            <div class="col-sm-2">
+                                Tipo de transporte
+                                <ui-select ng-model="tipoTransporte.selected" theme="bootstrap" reset-search-input="true">
+                                    <ui-select-match allow-clear="true" placeholder="SELECCIONAR">
+                                        {{$select.selected.descripcion}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="tipoTransporte in listaTiposTransporte | filter: $select.search">
+                                        <div ng-bind-html="tipoTransporte.descripcion | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            
+                            <div class="col-sm-3">
+                                Cuenta remesa
+                                <input type="text" class="form-control" ng-model="paramsConsulta.idCuentaRemitente"
+                                       maxlength="100" clearable>
+                            </div>
+
+                            <div class="col-sm-4">
+                                Rango fechas de remesa
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" uib-datepicker-popup="{{format}}"
+                                                   ng-model="paramsConsulta.fechaInicio"
+                                                   is-open="paramsConsulta.isOpenFechaInicio" datepicker-options="dateOptions"
+                                                   clear-text="{{datePicker.clearText}}" close-text="{{datePicker.closeText}}"
+                                                   current-text="{{datePicker.currentText}}"
+                                                   ng-disabled="!paramsConsulta.isOpenFechaInicio"
+                                                   ng-focus="preventFechaInicioFocus()" />
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-default" ng-click="openFechaInicio()">
+                                                    <i class="glyphicon glyphicon-calendar"></i>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" uib-datepicker-popup="{{format}}"
+                                                   ng-model="paramsConsulta.fechaFin"
+                                                   is-open="paramsConsulta.isOpenFechaFin" datepicker-options="dateOptions"
+                                                   clear-text="{{datePicker.clearText}}" close-text="{{datePicker.closeText}}"
+                                                   current-text="{{datePicker.currentText}}" 
+                                                   ng-disabled="!paramsConsulta.isOpenFechaFin"
+                                                   ng-focus="preventFechaFinFocus()" />
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-default" ng-click="openFechaFin()">
+                                                    <i class="glyphicon glyphicon-calendar"></i>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <table style="width: 100%; vertical-align: bottom;">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                N&uacute;m. remesa
+                                            </td>
+                                            <td>
+                                                <div class="checkbox checkbox-danger text-center">
+                                                    <input type="checkbox" id="formatoTCC" ng-checked="formatoTCC"
+                                                                           ng-click="selFormatoTCC()"> <label for="formatoTCC">&iquest;Formato TCC?</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                
+                                <tags-input class="bootstrap" ng-model="paramsConsulta.numRemesa"
+                                            replace-spaces-with-dashes="false"
+                                            on-tag-added="validarNumRemesa( $tag )"></tags-input>
+                            </div>
+                            
+                            <br>
+                            <div class="col-sm-3">
+                                Estado remesa
+                                <ui-select multiple ng-model="estadoRemesa.selected" theme="bootstrap" reset-search-input="true">
+                                    <ui-select-match allow-clear="true" placeholder="SELECCIONAR">
+                                        {{$item.descripcion}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="estadoRemesa in listaEstadosRemesa | filter: $select.search track by estadoRemesa.idInt">
+                                        <div ng-bind-html="estadoRemesa.descripcion | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            
+                            <div class="col-sm-2">
+                                Remesas con novedad
+                                <ui-select ng-model="filtroNovedad.selected" theme="bootstrap" reset-search-input="true"
+                                           on-select="filtrarPorNovedad()">
+                                    <ui-select-match allow-clear="true" placeholder="SELECCIONAR">
+                                        {{$select.selected.descripcion}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="filtroNovedad in listaFiltroNovedad | filter: $select.search">
+                                        <div ng-bind-html="filtroNovedad.descripcion | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            
+                            <div class="col-sm-4">
+                                Proceso
+                                <ui-select ng-model="proceso.selected" theme="bootstrap" reset-search-input="true">
+                                    <ui-select-match allow-clear="true" placeholder="SELECCIONAR">
+                                        {{$select.selected.descripcion}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="proceso in listaProcesos | filter: $select.search">
+                                        <div ng-bind-html="proceso.descripcion | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <table style="width: 100%;">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 80%;">
+                                                Centro operaci&oacute;n origen
+                                                <ui-select multiple ng-model="ceOpOrigen.selected" theme="bootstrap" reset-search-input="true">
+                                                    <ui-select-match allow-clear="true" placeholder="SELECCIONAR">
+                                                        {{$item.locaDescripcion}}
+                                                    </ui-select-match>
+                                                    <ui-select-choices repeat="ceOp in listaCentrosOrigen | filter: $select.search track by ceOp.locaIdInt">
+                                                        <div ng-bind-html="ceOp.locaDescripcion | highlight: $select.search"></div>
+                                                    </ui-select-choices>
+                                                </ui-select>
+                                            </td>
+                                            <td>
+                                                <br>
+                                                <div class="text-right">
+                                                    <button type="button" ng-class="isCeOpsOrigSelec ? 'btn btn-warning' :'btn btn-success'" 
+                                                            ng-click="seleccionarCeOpsOrig()"
+                                                            uib-tooltip="{{isCeOpsOrigSelec ? 'Limpiar' : 'Seleccionar todos'}}">
+                                                        <span class="glyphicon glyphicon-sort-by-attributes"></span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="col-sm-6">
+                                Estado novedad
+                                <ui-select multiple ng-model="estadoNovedad.selected" theme="bootstrap" reset-search-input="true">
+                                    <ui-select-match allow-clear="true" placeholder="SELECCIONAR">
+                                        {{$item.liva_descripcion}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="estNovedad in listaEstadoNovedad | filter: $select.search track by estNovedad.liva_id_int">
+                                        <div ng-bind-html="estNovedad.liva_descripcion | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            
+                            <div class="col-sm-3">
+                                C&oacute;digo unidad contenedora
+                                <input type="text" class="form-control" ng-model="paramsConsulta.codUnidadContenedora"
+                                       maxlength="200" clearable>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <table style="width: 100%;">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 80%">
+                                                Centro operaci&oacute;n destino *
+                                                <ui-select id="cbxCeOpDest" multiple ng-model="ceOpDestino.selected" theme="bootstrap"
+                                                           reset-search-input="true" on-select="obtenerUbicacionesTcc( '0', false )"
+                                                           on-remove="obtenerUbicacionesTcc( '0' )">
+                                                    <ui-select-match allow-clear="true" placeholder="SELECCIONAR">
+                                                        {{$item.descripcion}}
+                                                    </ui-select-match>
+                                                    <ui-select-choices repeat="ceOp in listaCentrosDestino | filter: $select.search track by ceOp.idInt">
+                                                        <div ng-bind-html="ceOp.descripcion | highlight: $select.search"></div>
+                                                    </ui-select-choices>
+                                                </ui-select>
+                                            </td>
+                                            <td>
+                                                <br>
+                                                <div class="text-right">
+                                                    <button type="button" ng-class="isCeOpsDestSelec ? 'btn btn-warning' :'btn btn-success'" 
+                                                            ng-click="seleccionarCeOpsDest()"
+                                                            uib-tooltip="{{isCeOpsDestSelec ? 'Limpiar' : 'Seleccionar todos'}}">
+                                                        <span class="glyphicon glyphicon-sort-by-attributes"></span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="col-sm-3">
+                                Ubicaciones TCC
+                                <ui-select multiple ng-model="ubicaciones.selected" theme="bootstrap" reset-search-input="true">
+                                    <ui-select-match allow-clear="true" placeholder="SELECCIONAR">
+                                        {{$item.descripcion}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="ubicacion in listaUbicacionesTcc | filter: $select.search track by ubicacion.idInt"
+                                                       refresh="obtenerUbicacionesTcc( $select.search, false )">
+                                        <div ng-bind-html="ubicacion.descripcion | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            
+                            <div class="col-sm-3">
+                                C&oacute;digo recogida
+                                <input type="text" class="form-control" ng-model="paramsConsulta.codRecogida"
+                                       maxlength="200" clearable>
+                            </div>
+                            
+                            <div class="col-sm-3">
+                                Licencia
+                                <ui-select ng-model="licencia.selected" theme="bootstrap" reset-search-input="true"
+                                           >
+                                    <ui-select-match allow-clear="true" placeholder="SELECCIONAR">
+                                        {{$select.selected.descripcion}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="l in listaLicencias | filter: $select.search">
+                                        <div ng-bind-html="l.descripcion | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            
+            <!-- Segunda sección -->
+            
+            <div class="panel panel-primary" style="background:rgba(220,220,220,0.2);">
+                <div class="panel-heading" role="tab" id="headingTwo">
+                    <h3 class="panel-title">
+                        <a style="cursor: pointer; cursor: hand;" data-toggle="collapse" data-parent="#accordion"
+                           data-target="#collapseParamConsultaDos" aria-expanded="true" aria-controls="collapseParamConsultaDos"> 
+                            <span class="glyphicon glyphicon-pushpin"></span> Otros par&aacute;metros de consulta
+                        </a>
+                    </h3>
+                </div>
+                
+                <div id="collapseParamConsultaDos" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+                    <div class="panel-body">
+                        
+                        
+                        <div class="row">
+                            <div class="col-sm-5">
+                                Identificaci&oacute;n - Nombre remitente
+                                <ui-select ng-model="remitente.selected" theme="bootstrap" reset-search-input="true"
+                                           on-select="_preventConsultaClientes( 'R' )">
+                                    <ui-select-match allow-clear="true" placeholder="SELECCIONAR">
+                                        {{$select.selected.nombreCliente}}
+                                     </ui-select-match>
+                                     <ui-select-choices repeat="remitente in listaRemitentes | filter: $select.search"
+                                                        refresh="consultarRemitente($select.search)"
+                                                        refresh-delay="0">
+                                        <div ng-bind-html="remitente.nombreCliente | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            
+                            <div class="col-sm-4">
+                                Sede remitente
+                                <ui-select ng-model="sedeRemitente.selected" theme="bootstrap" reset-search-input="true">
+                                    <ui-select-match allow-clear="true" placeholder="SELECCIONAR">
+                                        {{$select.selected.descripcion}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="sedeRemitente in listaSedesRemitente | filter: $select.search">
+                                        <div ng-bind-html="sedeRemitente.descripcion | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            
+                            <div class="col-sm-3">
+                                Tipo doc. referencia <span ng-if="paramsConsulta.numDocReferencia.length > 0" class="obligatorio">*</span>
+                                <ui-select ng-model="tipoDocumento.selected" theme="bootstrap" reset-search-input="true">
+                                    <ui-select-match allow-clear="true" placeholder="SELECCIONAR">
+                                        {{$select.selected.descripcion}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="tipoDocumento in listaTipoDocumento | filter: $select.search">
+                                        <div ng-bind-html="tipoDocumento.descripcion | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-sm-5">
+                                Identificaci&oacute;n - Nombre destinatario
+                                <ui-select ng-model="destinatario.selected" theme="bootstrap" reset-search-input="true"
+                                           on-select="_preventConsultaClientes( 'D' )">
+                                    <ui-select-match allow-clear="true" placeholder="SELECCIONAR">
+                                        {{$select.selected.nombreCliente}}
+                                     </ui-select-match>
+                                     <ui-select-choices repeat="destinatario in listaDestinatarios | filter: $select.search"
+                                                        refresh="consultarDestinatario($select.search)"
+                                                        refresh-delay="0">
+                                        <div ng-bind-html="destinatario.nombreCliente | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            
+                            <div class="col-sm-4">
+                                Sede destinatario
+                                <ui-select ng-model="sedeDestinatario.selected" theme="bootstrap" reset-search-input="true">
+                                    <ui-select-match allow-clear="true" placeholder="SELECCIONAR">
+                                        {{$select.selected.descripcion}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="sedeDestinatario in listaSedesDestinatario | filter: $select.search">
+                                        <div ng-bind-html="sedeDestinatario.descripcion | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            
+                            <div class="col-sm-3">
+                                N&uacute;m. documento referencia
+                                <input type="text" class="form-control" ng-model="paramsConsulta.numDocReferencia"
+                                               maxlength="100" clearable>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-sm-3">
+                                Tipo unidad
+                                <ui-select ng-model="tipoUnidad.selected" theme="bootstrap" reset-search-input="true">
+                                    <ui-select-match allow-clear="true" placeholder="SELECCIONAR">
+                                        {{$select.selected.descripcion}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="tipoUnidad in listaTipoUnidad | filter: $select.search">
+                                        <div ng-bind-html="tipoUnidad.descripcion | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            
+                            <div class="col-sm-3">
+                                C&oacute;digo unidad
+                                <input type="text" class="form-control" ng-model="paramsConsulta.codigoUnidad"
+                                       maxlength="100" clearable>
+                            </div>
+                            
+                            <div class="col-sm-3">
+                                Estado unidad
+                                <ui-select ng-model="estadoUnidad.selected" theme="bootstrap" reset-search-input="true">
+                                    <ui-select-match allow-clear="true" placeholder="SELECCIONAR">
+                                        {{$select.selected.descripcion}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="estadoUnidad in listaEstadosUnidad | filter: $select.search">
+                                        <div ng-bind-html="estadoUnidad.descripcion | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            
+                            <div class="col-sm-3">
+                                Ciudad origen
+                                <ui-select ng-model="ciudadOrigen.selected" theme="bootstrap" reset-search-input="true"
+                                           on-select="_preventConsultaCiudades()">
+                                    <ui-select-match allow-clear="true" placeholder="SELECCIONAR">
+                                        {{$select.selected.descripcion}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="ciudad in listaCiudadesOrigen | filter: $select.search"
+                                                       refresh="obtenerCiudadesOrigen($select.search)"
+                                                       refresh-delay="0">
+                                        <div ng-bind-html="ciudad.descripcion | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-sm-3">
+                                N&uacute;m. despacho cliente
+                                <input type="text" class="form-control" ng-model="paramsConsulta.numDespachoCliente"
+                                       maxlength="100" clearable numbers-only ng-keyup="leerNumDespacho($event)">
+                            </div>
+                            
+                            <div class="col-sm-3">
+                                Tipo de cobertura
+                                <ui-select multiple ng-model="tipoCobertura.selected" theme="bootstrap" reset-search-input="true">
+                                    <ui-select-match allow-clear="true" placeholder="SELECCIONAR">
+                                        {{$item.descripcion}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="tipoCobertura in listaTiposCobertura | filter: $select.search track by tipoCobertura.idInt">
+                                        <div ng-bind-html="tipoCobertura.descripcion | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            
+                            <div class="col-sm-3">
+                                Tipo servicio operativo
+                                <ui-select ng-model="tipoServicio.selected" theme="bootstrap" reset-search-input="true">
+                                    <ui-select-match allow-clear="true" placeholder="SELECCIONAR">
+                                        {{$select.selected.descripcion}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="tipoServicio in listaTipoServicio | filter: $select.search">
+                                        <div ng-bind-html="tipoServicio.descripcion | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            
+                            <div class="col-sm-3">
+                                Ciudad destino
+                                <ui-select ng-model="ciudadDestino.selected" theme="bootstrap" reset-search-input="true"
+                                            on-select="_preventConsultaCiudades()">
+                                    <ui-select-match allow-clear="true" placeholder="SELECCIONAR">
+                                        {{$select.selected.descripcion}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="ciudad in listaCiudadesDestino | filter: $select.search"
+                                                       refresh="obtenerCiudadesDestino($select.search)"
+                                                       refresh-delay="0">
+                                        <div ng-bind-html="ciudad.descripcion | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tercera sección -->
+            
+            <div class="panel panel-primary">
+                <div class="panel-heading" role="tab" id="headingThree">
+                    <h3 class="panel-title">
+                        <a style="cursor: pointer; cursor: hand;" data-toggle="collapse" data-parent="#accordion"
+                           data-target="#collapseParamConsultaTres" aria-expanded="true" aria-controls="collapseParamConsultaTres"> 
+                            <span class="glyphicon glyphicon-pushpin"></span> Otros par&aacute;metros de consulta novedades por lote
+                        </a>
+                    </h3>
+                </div>
+                
+                <div id="collapseParamConsultaTres" class="panel-collapse collapse in" 
+                     role="tabpanel" aria-labelledby="headingThree" style="background:rgba(220,220,220,0.2);">
+                    <div class="panel-body">
+                        <!--
+                        <div class="row">
+                            
+                            <div class="col-sm-2">
+                                <div class="radio radio-danger">
+                                    <input type="radio" ng-model="paramsConsulta.tipoNovedad"
+                                           ng-click="limpiarTipoNovedad();"
+                                           id="rdbNovNacional" value="nacional">
+                                    <label for="rdbNovNacional">Nacional</label>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-2">
+                                <div class="radio radio-danger">
+                                    <input type="radio" ng-model="paramsConsulta.tipoNovedad"
+                                           ng-click="limpiarTipoNovedad();"
+                                           id="rdbNovLocal" value="local">
+                                    <label for="rdbNovLocal">Local</label>
+                                </div>
+                            </div>
+                        </div>
+                        -->
+                        
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="panel panel-primary">
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <h2 class="panel-title">
+                                                    <strong>Nacional</strong>
+                                                </h2>
+                                            </div>
+                                        </div>
+                                        <div class="row top-row">
+
+                                            <div class="col-sm-6">
+                                                Centro operaci&oacute;n destino
+                                                <ui-select id="cbxCeopDestNacional" ng-model="ceOpDestinoNacional.selected" theme="bootstrap" reset-search-input="true">
+                                                    <ui-select-match allow-clear="true" placeholder="SELECCIONAR">
+                                                        {{$select.selected.descripcion}}
+                                                    </ui-select-match>
+                                                    <ui-select-choices repeat="ceOp in listaCentrosDestino | filter: $select.search">
+                                                        <div ng-bind-html="ceOp.descripcion | highlight: $select.search"></div>
+                                                    </ui-select-choices>
+                                                </ui-select>
+                                            </div>
+
+                                            <div class="col-sm-3">
+                                                C&oacute;digo van
+                                                <input type="text" class="form-control" ng-model="paramsConsulta.codVan"
+                                                       maxlength="50" clearable>
+                                            </div>
+
+                                            <div class="col-sm-3">
+                                                Fecha inicio viaje *
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" uib-datepicker-popup="{{format}}"
+                                                           ng-model="paramsConsulta.fechaInicioViaje"
+                                                           is-open="paramsConsulta.isOpenFechaInicioViaje" datepicker-options="dateOptions"
+                                                           clear-text="{{datePicker.clearText}}" close-text="{{datePicker.closeText}}"
+                                                           current-text="{{datePicker.currentText}}" 
+                                                           ng-disabled="!paramsConsulta.isOpenFechaInicioViaje"
+                                                           ng-focus="preventFechaInicioViajeFocus()" />
+                                                    <span class="input-group-btn">
+                                                        <button type="button" class="btn btn-default" ng-click="openFechaInicioViaje()">
+                                                            <i class="glyphicon glyphicon-calendar"></i>
+                                                        </button>
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                Centro operaci&oacute;n origen
+                                                <ui-select ng-model="ceOpOrigenNacional.selected" theme="bootstrap" reset-search-input="true">
+                                                    <ui-select-match allow-clear="true" placeholder="SELECCIONAR">
+                                                        {{$select.selected.locaDescripcion}}
+                                                    </ui-select-match>
+                                                    <ui-select-choices repeat="ceOp in listaCentrosOrigen | filter: $select.search">
+                                                        <div ng-bind-html="ceOp.locaDescripcion | highlight: $select.search"></div>
+                                                    </ui-select-choices>
+                                                </ui-select>
+                                            </div>
+
+                                            <div class="col-sm-3">
+                                                N&uacute;mero viaje
+                                                <input type="text" class="form-control" ng-model="paramsConsulta.numViaje"
+                                                               maxlength="20" clearable>
+                                            </div>
+
+                                            <div class="col-sm-3">
+                                                Fecha fin viaje *
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" uib-datepicker-popup="{{format}}"
+                                                           ng-model="paramsConsulta.fechaFinViaje"
+                                                           is-open="paramsConsulta.isOpenFechaFinViaje" datepicker-options="dateOptions"
+                                                           clear-text="{{datePicker.clearText}}" close-text="{{datePicker.closeText}}"
+                                                           current-text="{{datePicker.currentText}}" 
+                                                           ng-disabled="!paramsConsulta.isOpenFechaFinViaje"
+                                                           ng-focus="preventFechaFinViajeFocus()" />
+                                                    <span class="input-group-btn">
+                                                        <button type="button" class="btn btn-default" ng-click="openFechaFinViaje()">
+                                                            <i class="glyphicon glyphicon-calendar"></i>
+                                                        </button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- LOCAL -->
+                            <div class="col-sm-6">
+                                <div class="panel panel-primary">
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <h2 class="panel-title">
+                                                    <strong>Local</strong>
+                                                </h2>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                Fecha inicio entrega *
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" uib-datepicker-popup="{{format}}"
+                                                           ng-model="paramsConsulta.fechaInicioEntrega"
+                                                           is-open="paramsConsulta.isOpenFechaInicioEntrega" datepicker-options="dateOptions"
+                                                           clear-text="{{datePicker.clearText}}" close-text="{{datePicker.closeText}}"
+                                                           current-text="{{datePicker.currentText}}" 
+                                                           ng-disabled="!paramsConsulta.isOpenFechaInicioEntrega"
+                                                           ng-focus="preventFechaInicioEntregaFocus()" />
+                                                    <span class="input-group-btn">
+                                                        <button type="button" class="btn btn-default" ng-click="openFechaInicioEntrega()">
+                                                            <i class="glyphicon glyphicon-calendar"></i>
+                                                        </button>
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-3">
+                                                Fecha fin entrega *
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" uib-datepicker-popup="{{format}}"
+                                                           ng-model="paramsConsulta.fechaFinEntrega"
+                                                           is-open="paramsConsulta.isOpenFechaFinEntrega" datepicker-options="dateOptions"
+                                                           clear-text="{{datePicker.clearText}}" close-text="{{datePicker.closeText}}"
+                                                           current-text="{{datePicker.currentText}}" 
+                                                           ng-disabled="!paramsConsulta.isOpenFechaFinEntrega"
+                                                           ng-focus="preventFechaFinEntregaFocus()" />
+                                                    <span class="input-group-btn">
+                                                        <button type="button" class="btn btn-default" ng-click="openFechaFinEntrega()">
+                                                            <i class="glyphicon glyphicon-calendar"></i>
+                                                        </button>
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-3">
+                                                M&oacute;vil local
+                                                <input id="txtVehLocal" type="text" class="form-control" ng-model="paramsConsulta.vehiculo"
+                                                       maxlength="100" clearable>
+                                            </div>
+
+                                            <div class="col-sm-3">
+                                                Viaje
+                                                <input type="text" class="form-control" ng-model="paramsConsulta.numViajeLocal"
+                                                               maxlength="100" clearable>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                            
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-right" style="margin-right: 1%;">
+                <button type="button" class="btn btn-primary" ng-click="consultar( 1, true );"
+                        ng-if="botones.btnConsultar === true">
+                    <span class="glyphicon glyphicon-search"></span> Consultar
+                </button>
+
+                <button type="button" class="btn btn-default" ng-click="limpiar()">
+                    <span class="glyphicon glyphicon-erase"></span> Limpiar
+                </button>
+            </div>
+            
+            <br>
+            
+            <div class="panel panel-primary">
+                <div class="panel-heading" role="tab">
+                    <h2 class="panel-title">
+                        Lista de remesas <span class="badge">{{listaRemesas.length}}</span>
+                        Seleccionados <span class="badge">{{seleccionadosGrid}}</span> 
+                    </h2>
+                </div>
+
+                <div class="panel-body">
+                    
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table style="width: 100%;">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div class="label label-warning" style="font-size: 10pt;">
+                                                Registros consultados: {{listaRemesas.length}} - Unidades: {{totalUnidades}}
+                                            </div>
+                                        </td>
+                                        
+                                        <td class="text-right">
+                                            
+                                            <button type="button" class="btn btn-primary" ng-click="abrirIngresoNovedad();"
+                                                    ng-if="botones.btnIngresarNovedad === true"> 
+                                                <span class="glyphicon glyphicon-comment"></span> Ingresar novedad
+                                            </button>
+                                            
+                                            <button type="button" class="btn btn-primary" ng-click="abrirSolucion();"
+                                                    ng-if="botones.btnSolucionarNovedad === true" ng-disabled="INHABILITAR_BOTON_SOLUCION_NOVEDAD">
+                                                <span class="glyphicon glyphicon-ok"></span> Solucionar novedad
+                                            </button>
+                                            
+                                            <button type="button" class="btn btn-primary" ng-click="ejecutarNovedad();"
+                                                    ng-if="botones.btnEjecutarNovedad === true" ng-disabled="INHABILITAR_BOTON_EJECUTAR_NOVEDAD">
+                                                <span class="glyphicon glyphicon-cog"></span> Ejecutar novedad
+                                            </button>
+                                            
+                                            <!--
+                                            <button type="button" class="btn btn-primary" ng-click="anularNovedad();">
+                                                <span class="glyphicon glyphicon-remove-sign"></span> Anular novedad
+                                            </button>
+                                            -->
+
+                                            <button type="button" class="btn btn-primary" ng-click="verFormatosImpresion();"
+                                                    ng-if="botones.btnImprimirRotulos === true">
+                                                <span class="glyphicon glyphicon-file"></span> Imprimir r&oacute;tulos
+                                            </button>
+
+                                            <button type="button" class="btn btn-primary" ng-click="verOpcionesExportacion()"
+                                                    ng-if="botones.btnExportarExcel === true">
+                                                <span class="glyphicon glyphicon-list-alt"></span> Exportar a Excel
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <br>
+                    
+                    <!--
+                    <div id="divHeader" style="overflow: hidden;">
+                        <table id="tbHeaders" st-table="listaRemesas" st-safe-src="_listaRemesas" class="table-bordered table-condensed table-hover"
+                               style="width: 100%;">
+
+                            <thead>
+                                <tr id="header" style="display: none;">
+                                    <th class="text-center">
+                                        <div class="setWidth contact checkbox checkbox-warning" style="width: 17px; height: 17px;">
+                                            <input type="checkbox" id="chk-all"
+                                                   ng-click="setSeleccionarTodasRemesas()"
+                                                   ng-checked="_seleccionarTodasRemesas">
+                                            <label for="chk-all"></label>
+                                        </div>
+                                    </th>
+                                    <th class="text-center" ng-show="botones.btnVerUnidadesGrid === true">
+                                        <div style="width: 24px;"></div>
+                                    </th>
+                                    <th class="text-center" ng-show="botones.btnVerDocumentosClienteGrid === true">
+                                        <div style="width: 24px;"></div>
+                                    </th>
+                                    <th class="text-center" ng-show="botones.btnVerNovedadesRemesaGrid === true">
+                                        <div style="width: 24px;"></div>
+                                    </th>
+                                    <th class="text-center" ng-show="botones.btnVerCumplidoRemesaGrid === true">
+                                        <div style="width: 24px;"></div>
+                                    </th>
+                                    <th class="text-center setWidth contact" st-sort="numRemesa">
+                                        <div>N&uacute;mero remesa</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="unidadesRemesa">
+                                        <div>Unidades</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="fechaRemesa">
+                                        <div>Fecha</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="estadoRemesa">
+                                        <div>Estado remesa</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="descProceso">
+                                        <div>Proceso remesa</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="consecutivoNovedad">
+                                        <div>Consecutivo novedad</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="estadoNovedad">
+                                        <div>Estado novedad</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="unidadesNovedad">
+                                        <div>Unidades con novedad</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="usuarioPlantea">
+                                        <div>Usuario planteamiento</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="formaPago">
+                                        <div>Forma pago</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="cuenta">
+                                        <div>Cuenta</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="tipoTransporte">
+                                        <div>Tipo transporte</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="tipoServicioOperativo">
+                                        <div>Tipo servicio</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="ceOpOrigen">
+                                        <div>Ceop Origen</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="ciudadOrigen">
+                                        <div>Ciudad Origen</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="identificacionRemitente">
+                                        <div>Identificaci&oacute;n remitente</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="nombreRemitente">
+                                        <div>Nombre remitente</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="sedeRemitente">
+                                        <div>Sede Remitente</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="direccionRemitente">
+                                        <div>Direcci&oacute;n Remitente</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="telefonoRemitente">
+                                        <div>Tel&eacute;fono Remitente</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="ceOpDestino">
+                                        <div>CeOp destino</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="ciudadDestino">
+                                        <div>Ciudad destino</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="tipoCobertura">
+                                        <div>Tipo cobertura</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="identificacionDestinatario">
+                                        <div>Identificaci&oacute;n destinatario</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="nombreDestinatario">
+                                        <div>Nombre destinatario</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="sedeDestinatario">
+                                        <div>Sede Destinatario</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="direccionDestinatario">
+                                        <div>Direcci&oacute;n destinatario</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="telefonoDestinatario">
+                                        <div>Tel&eacute;fono destinatario</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="descTipoUnidad">
+                                        <div>Tipo unidad</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="pesoReal">
+                                        <div>Peso real</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="pesoVolumen">
+                                        <div>Peso volumen</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="observaciones">
+                                        <div>Observaciones</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="usuario">
+                                        <div>Usuario</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="viaje">
+                                        <div>Viaje nacional</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="van">
+                                        <div>Van</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="fechaProgramacionNacional">
+                                        <div>Fecha programaci&oacute;n nacional</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="vehiculo">
+                                        <div>M&oacute;vil local</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="viajeLocal">
+                                        <div>Viaje</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="rutaLocal">
+                                        <div>Ruta</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="fechaProgramacionLocal">
+                                        <div>Fecha programaci&oacute;n local</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    
+                    <div id="divResultados" style="height: 450px; overflow: auto; width: 100%;">
+                        <table id="tbResultados" st-table="listaRemesas" st-safe-src="_listaRemesas" class="table-bordered table-condensed table-hover"
+                               style="width: 100%;">
+                            
+                            <thead>
+                                <tr id="result">
+                                    <th class="text-center">
+                                        <div class="setWidth contact checkbox checkbox-warning" style="width: 17px; height: 17px;">
+                                            <input type="checkbox" id="chk-all"
+                                                   ng-click="setSeleccionarTodasRemesas()"
+                                                   ng-checked="_seleccionarTodasRemesas">
+                                            <label for="chk-all"></label>
+                                        </div>
+                                    </th>
+                                    <th class="text-center" ng-show="botones.btnVerUnidadesGrid === true">
+                                        <div style="width: 24px;"></div>
+                                    </th>
+                                    <th class="text-center" ng-show="botones.btnVerDocumentosClienteGrid === true">
+                                        <div style="width: 24px;"></div>
+                                    </th>
+                                    <th class="text-center" ng-show="botones.btnVerNovedadesRemesaGrid === true">
+                                        <div style="width: 24px;"></div>
+                                    </th>
+                                    <th class="text-center" ng-show="botones.btnVerCumplidoRemesaGrid === true">
+                                        <div style="width: 24px;"></div>
+                                    </th>
+                                    <th class="text-center setWidth contact" st-sort="numRemesa">
+                                        <div>N&uacute;mero remesa</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="unidadesRemesa">
+                                        <div>Unidades</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="fechaRemesa">
+                                        <div>Fecha</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="estadoRemesa">
+                                        <div>Estado remesa</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="descProceso">
+                                        <div>Proceso remesa</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="consecutivoNovedad">
+                                        <div>Consecutivo novedad</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="estadoNovedad">
+                                        <div>Estado novedad</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="unidadesNovedad">
+                                        <div>Unidades con novedad</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="usuarioPlantea">
+                                        <div>Usuario planteamiento</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="formaPago">
+                                        <div>Forma pago</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="cuenta">
+                                        <div>Cuenta</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="tipoTransporte">
+                                        <div>Tipo transporte</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="tipoServicioOperativo">
+                                        <div>Tipo servicio</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="ceOpOrigen">
+                                        <div>Ceop Origen</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="ciudadOrigen">
+                                        <div>Ciudad Origen</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="identificacionRemitente">
+                                        <div>Identificaci&oacute;n remitente</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="nombreRemitente">
+                                        <div>Nombre remitente</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="sedeRemitente">
+                                        <div>Sede Remitente</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="direccionRemitente">
+                                        <div>Direcci&oacute;n Remitente</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="telefonoRemitente">
+                                        <div>Tel&eacute;fono Remitente</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="ceOpDestino">
+                                        <div>CeOp destino</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="ciudadDestino">
+                                        <div>Ciudad destino</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="tipoCobertura">
+                                        <div>Tipo cobertura</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="identificacionDestinatario">
+                                        <div>Identificaci&oacute;n destinatario</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="nombreDestinatario">
+                                        <div>Nombre destinatario</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="sedeDestinatario">
+                                        <div>Sede Destinatario</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="direccionDestinatario">
+                                        <div>Direcci&oacute;n destinatario</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="telefonoDestinatario">
+                                        <div>Tel&eacute;fono destinatario</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="descTipoUnidad">
+                                        <div>Tipo unidad</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="pesoReal">
+                                        <div>Peso real</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="pesoVolumen">
+                                        <div>Peso volumen</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="observaciones">
+                                        <div>Observaciones</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="usuario">
+                                        <div>Usuario</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="viaje">
+                                        <div>Viaje nacional</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="van">
+                                        <div>Van</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="fechaProgramacionNacional">
+                                        <div>Fecha programaci&oacute;n nacional</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="vehiculo">
+                                        <div>M&oacute;vil local</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="viajeLocal">
+                                        <div>Viaje</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="rutaLocal">
+                                        <div>Ruta</div>
+                                    </th>
+                                    
+                                    <th class="text-center setWidth contact" st-sort="fechaProgramacionLocal">
+                                        <div>Fecha programaci&oacute;n local</div>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>&nbsp;</th>
+                                    <th ng-if="botones.btnVerUnidadesGrid === true">&nbsp;</th>
+                                    <th ng-if="botones.btnVerDocumentosClienteGrid === true">&nbsp;</th>
+                                    <th ng-if="botones.btnVerNovedadesRemesaGrid === true">&nbsp;</th>
+                                    <th ng-if="botones.btnVerCumplidoRemesaGrid === true">&nbsp;</th>
+                                    <th colspan="40">
+                                        <input st-search placeholder="Buscar" class="input-sm form-control" type="search" />
+                                    </th>
+                                </tr>
+                            </thead>
+                            
+                            <tbody>
+                                <tr ng-repeat="remesa in listaRemesas" id="tr-{{$index}}" ng-click="sombrearFila( $index )">
+                                    
+                                    <td>
+                                        <div class="checkbox checkbox-warning" style="width: 17px; height: 17px;">
+                                            <input type="checkbox" id="chk-{{remesa.pos}}" ng-checked="remesa.selected"
+                                                   ng-click="seleccionarRemesa( remesa )">
+                                            <label for="chk-{{remesa.pos}}"></label>
+                                        </div>
+                                    </td>
+                                    
+                                    <td ng-if="botones.btnVerUnidadesGrid === true">
+                                        <div style="width: 24px;">
+                                            <button class="btn btn-xs {{ remesa.tieneNovedadUnidad === true ? 'btn-danger' : 'btn-info' }}"
+                                                    title="Ver unidades." ng-click="verUnidades(remesa)">
+                                                <span class="glyphicon glyphicon-duplicate"></span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                    
+                                    <td ng-if="botones.btnVerDocumentosClienteGrid === true">
+                                        <div style="width: 24px;">
+                                            <button class="btn btn-xs btn-danger" title="Ver documentos del cliente."
+                                                    ng-click="verDocumentosCliente(remesa)">
+                                                <span class="glyphicon glyphicon-folder-open"></span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                    
+                                    <td ng-if="botones.btnVerNovedadesRemesaGrid === true">
+                                        <div style="width: 24px;">
+                                            <button class="btn btn-xs btn-warning" title="Ver novedades de la remesa."
+                                                    ng-click="abrirDetalleNovedad( $index, remesa );"
+                                                    ng-disabled="!remesa.tieneNovedad"> 
+                                                <span class="glyphicon glyphicon-warning-sign"></span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                    
+                                    <td ng-if="botones.btnVerCumplidoRemesaGrid === true">
+                                        <div style="width: 24px;">
+                                            <button ng-disabled="remesa.cumplido === 'N'"
+                                                    class="btn btn-xs btn-success" uib-tooltip="Ver cumplido."
+                                                    ng-click="verCertificado( remesa )">
+                                                <span class="glyphicon glyphicon-camera"></span>
+                                            </button>
+                                        </div>
+                                    </td>
+
+                                    <td class="setWidth contact">
+                                        <div>{{remesa.numRemesa}}</div>
+                                    </td>
+                                    
+                                    <td class="text-right setWidth contact">
+                                        <div>{{remesa.unidadesRemesa}}</div>
+                                    </td>
+
+                                    <td class="setWidth contact">
+                                        <div>{{remesa.fechaRemesa}}</div>
+                                    </td>
+
+                                    <td class="setWidth contact">
+                                        <div>{{remesa.estadoRemesa}}</div>
+                                    </td>
+                                    
+                                    <td class="setWidth contact">
+                                        <div>{{remesa.descProceso}}</div>
+                                    </td>
+                                    
+                                    <td class="setWidth contact">
+                                        <div>{{remesa.consecutivoNovedad}}</div>
+                                    </td>
+                                    
+                                    <td class="setWidth contact">
+                                        <div>{{remesa.estadoNovedad}}</div>
+                                    </td>
+                                    
+                                    <td class="setWidth contact">
+                                        <div>{{remesa.unidadesNovedad}}</div>
+                                    </td>
+                                    
+                                    <td class="setWidth contact">
+                                        <div>{{remesa.usuarioPlantea}}</div>
+                                    </td>
+                                    
+                                    <td class="setWidth contact">
+                                        <div>{{remesa.formaPago}}</div>
+                                    </td>
+
+                                    <td class="setWidth contact">
+                                        <div>{{remesa.cuenta}}</div>
+                                    </td>
+                                    
+                                    <td class="setWidth contact">
+                                        <div>{{remesa.tipoTransporte}}</div>
+                                    </td>
+
+                                    <td class="setWidth contact">
+                                        <div>{{remesa.tipoServicioOperativo}}</div>
+                                    </td>
+
+                                    <td class="setWidth contact">
+                                        <div>{{remesa.ceOpOrigen}}</div>
+                                    </td>
+
+                                    <td class="setWidth contact">
+                                        <div>{{remesa.ciudadOrigen}}</div>
+                                    </td>
+
+                                    <td class="setWidth contact">
+                                        <div>{{remesa.identificacionRemitente}}</div>
+                                    </td>
+
+                                    <td class="setWidth contact">
+                                        <div>{{remesa.nombreRemitente}}</div>
+                                    </td>
+
+                                    <td class="setWidth contact">
+                                        <div>{{remesa.sedeRemitente}}</div>
+                                    </td>
+
+                                    <td class="setWidth contact">
+                                        <div>{{remesa.direccionRemitente}}</div>
+                                    </td>
+
+                                    <td class="setWidth contact">
+                                        <div>{{remesa.telefonoRemitente}}</div>
+                                    </td>
+
+                                    <td class="setWidth contact">
+                                        <div>{{remesa.ceOpDestino}}</div>
+                                    </td>
+
+                                    <td class="setWidth contact">
+                                        <div>{{remesa.ciudadDestino}}</div>
+                                    </td>
+                                    
+                                    <td class="setWidth contact">
+                                        <div>{{remesa.tipoCobertura}}</div>
+                                    </td>
+
+                                    <td class="setWidth contact">
+                                        <div>{{remesa.identificacionDestinatario}}</div>
+                                    </td>
+
+                                    <td class="setWidth contact">
+                                        <div>{{remesa.nombreDestinatario}}</div>
+                                    </td>
+
+                                    <td class="setWidth contact">
+                                        <div>{{remesa.sedeDestinatario}}</div>
+                                    </td>
+
+                                    <td class="setWidth contact">
+                                        <div>{{remesa.direccionDestinatario}}</div>
+                                    </td>
+
+                                    <td class="setWidth contact">
+                                        <div>{{remesa.telefonoDestinatario}}</div>
+                                    </td>
+                                    
+                                    <td class="setWidth contact">
+                                        <div>{{remesa.descTipoUnidad}}</div>
+                                    </td>
+
+                                    <td class="text-right setWidth contact">
+                                        <div>{{remesa.pesoReal}}</div>
+                                    </td>
+
+                                    <td class="text-right setWidth contact">
+                                        <div>{{remesa.pesoVolumen}}</div>
+                                    </td>
+
+                                    <td class="setWidth contact">
+                                        <div>{{remesa.observaciones}}</div>
+                                    </td>
+                                    
+                                    <td class="setWidth contact">
+                                        <div>{{remesa.usuario}}</div>
+                                    </td>
+                                    
+                                    <td class="setWidth contact">
+                                        <div>{{remesa.viaje}}</div>
+                                    </td>
+                                    
+                                    <td class="setWidth contact">
+                                        <div>{{remesa.van}}</div>
+                                    </td>
+                                    
+                                    <td class="setWidth contact">
+                                        <div>{{remesa.fechaProgramacionNacional}}</div>
+                                    </td>
+                                    
+                                    <td class="setWidth contact">
+                                        <div>{{remesa.vehiculo}}</div>
+                                    </td>
+                                    
+                                    <td class="setWidth contact">
+                                        <div>{{remesa.viajeLocal}}</div>
+                                    </td>
+                                    
+                                    <td class="setWidth contact">
+                                        <div>{{remesa.rutaLocal}}</div>
+                                    </td>
+                                    
+                                    <td class="setWidth contact">
+                                        <div>{{remesa.fechaProgramacionLocal}}</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-sm-4 text-left">
+                            Total registros: <strong>{{totalRegistros}}</strong>
+                        </div>
+                        <div class="col-sm-8 text-right">
+                            <a href="javascript:;" ng-click="paginarConsulta()">&laquo;</a> 
+                            <a href="javascript:;" ng-click="paginarConsulta( pagIni - 1 )">&lsaquo;</a>
+                            <strong>{{pagIni}}</strong> de <strong>{{pagFin}}</strong> 
+                            <a href="javascript:;" ng-click="paginarConsulta( pagIni + 1 )">&rsaquo;</a> 
+                            <a href="javascript:;" ng-click="paginarConsulta( pagFin )">&raquo;</a>
+                        </div>
+                    </div>
+                    -->
+                    
+                </div>
+                
+                
+                <div class="panel-body">
+                    
+                    <div class="row">
+                        <div class="col-sm-12">
+                            
+                            <div ui-grid="opcionesGrid" ui-grid-draggable-rows 
+                                 ui-grid-pinning ui-grid-resize-columns 
+                                 ui-grid-edit ui-grid-row-edit 
+                                 ui-grid-move-columns ui-grid-save-state
+                                 ui-grid-cellNav
+                                 class="grid"></div>
+
+                        </div>
+                    </div> 
+                    
+                    <div class="row top-row">
+                        <div class="col-sm-4 text-left">
+                            Total registros: <strong>{{totalRegistros}}</strong>
+                        </div>
+                        <div class="col-sm-8 text-right">
+                            <button class="btn btn-xs btn-default" title="Primero" ng-click="paginarConsulta()">
+                                <i class="fa fa-fast-backward"></i>
+                            </button>
+                            <button class="btn btn-xs btn-default" title="Atras" ng-click="paginarConsulta( pagIni - 1 )">
+                                <i class="fa fa-chevron-left"></i>
+                            </button>
+                            
+                            <strong>{{pagIni}}</strong> de <strong>{{pagFin}}</strong> 
+                            
+                            <button class="btn btn-xs btn-default" title="Siguiente" ng-click="paginarConsulta( pagIni + 1 )">
+                                <i class="fa fa-chevron-right"></i>
+                            </button>
+                            <button class="btn btn-xs btn-default" title="Ultimo" ng-click="paginarConsulta( pagFin )">
+                                <i class="fa fa-fast-forward"></i>
+                            </button>
+                            
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    
+    
+    
+
+</div>

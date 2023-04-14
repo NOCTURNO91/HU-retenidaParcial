@@ -1,0 +1,412 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cancel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <br>
+    </div>
+    <div class="modal-body">
+        <div class="panel panel-primary">
+            <div class="panel-heading" role="tab">
+                <h2 class="panel-title">
+                    Soluci&oacute;n a novedades
+                </h2>
+            </div>
+
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-3">
+                        Tipo soluci&oacute;n *
+                        <ui-select id="cbxTipoSolucion" ng-model="solucion.tipoSolucion.selected" theme="bootstrap"
+                                   reset-search-input="true" on-select="seleccionarTipoSolucion()">
+                            <ui-select-match allow-clear="true" placeholder="SELECCIONAR">
+                                {{$select.selected.liva_descripcion}}
+                            </ui-select-match>
+                            <ui-select-choices repeat="tipoSolucion in listaTipoSolucion | filter: $select.search">
+                                <div ng-bind-html="tipoSolucion.liva_descripcion | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div class="col-sm-9 text-right">
+                        <br>
+                        <button type="button" class="btn btn-primary" ng-click="cancel();">
+                            <span class="glyphicon glyphicon-remove"></span> Cancelar
+                        </button>
+
+                        <button type="button" class="btn btn-primary" ng-click="grabar();">
+                            <span class="glyphicon glyphicon-floppy-disk"></span> Grabar soluci&oacute;n
+                        </button>
+                    </div>
+                </div>
+                <br>
+                
+                <div class="row" ng-if="esMasiva === false">
+                    <div class="col-sm-2">
+                        N&uacute;mero remesa<br>
+                        <span class="label label-warning" style="font-size: 11pt;">
+                            {{remesa.numRemesa}}
+                        </span>
+                    </div>
+                    <div class="col-sm-2">
+                        Unidad de negocio<br>
+                        <span class="label label-warning" style="font-size: 11pt;">
+                            {{remesa.unidadNegocio}}
+                        </span>
+                    </div>
+                    <div class="col-sm-2">
+                        Fecha remesa<br>
+                        <span class="label label-warning" style="font-size: 11pt;">
+                            {{remesa.fechaRemesa}}
+                        </span>
+                    </div>
+                    <div class="col-sm-4">
+                        Estado remesa<br>
+                        <span class="label label-warning" style="font-size: 11pt;">
+                            {{remesa.estadoRemesa}}
+                        </span>
+                    </div>
+                    <div class="col-sm-2">
+                        Estado novedad<br>
+                        <span class="label label-warning" style="font-size: 11pt;">
+                            {{remesa.estadoNovedad}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <div ng-include="'app/novedadesmasivas/partial-solucion-masiva.html'"></div>
+            
+            <!--
+            <div ng-if="idTipoSolucion === TIPO_SOL_REOFRECIMIENTO">
+                <uib-accordion close-others="false">
+                    <div uib-accordion-group class="panel-primary" is-open="true" heading="Soluci&oacute;n a novedades - Reofrecimiento">
+                        <div style="margin-left: 1%; margin-right: 1%;">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    Contacto cliente *
+                                    <input id="txtReofContactoCliente" type="text" maxlength="190" class="input-sm form-control"
+                                           ng-disabled="solucion.reofrecimiento.disabled"
+                                           ng-model="solucion.reofrecimiento.caseContactoCliente">
+                                </div>
+                                <div class="col-sm-6">
+                                    Funcionario TCC que respalda soluci&oacute;n
+                                    <input id="txtReofFrioTcc" type="text" maxlength="190" class="input-sm form-control"
+                                           ng-disabled="solucion.reofrecimiento.disabled"
+                                           ng-model="solucion.reofrecimiento.caseFrioParticipe">
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    Detalle (M&iacute;nimo {{minCaracteresObs}} caracteres) *
+                                    <textarea id="txtReofDetalle" type="text" class="input-sm form-control" maxlength="250"
+                                              ng-disabled="solucion.reofrecimiento.disabled"
+                                              ng-model="solucion.reofrecimiento.caseSeguimiento"></textarea>
+                                    Caracteres: <strong>{{solucion.reofrecimiento.caseSeguimiento.length}}</strong>
+                                </div>
+                                <div class="col-sm-7">
+                                    <table style="width: 100%;">
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    Fecha ofrecimiento *
+                                                    <div class="input-group" style="width: 95%;">
+                                                        <input type="text" class="form-control" uib-datepicker-popup="{{format}}"
+                                                               ng-model="solucion.reofrecimiento.fechaOfrecimiento"
+                                                               is-open="solucion.reofrecimiento.isOpenFechaOfrecimiento" datepicker-options="dateOptions"
+                                                               clear-text="{{datePicker.clearText}}" close-text="{{datePicker.closeText}}"
+                                                               current-text="{{datePicker.currentText}}"
+                                                               ng-disabled="!solucion.reofrecimiento.isOpenFechaOfrecimiento" />
+                                                        <span class="input-group-btn">
+                                                            <button type="button" class="btn btn-default" ng-click="openFechaOfrecimiento()"
+                                                                    ng-disabled="solucion.reofrecimiento.disabled">
+                                                                <i class="glyphicon glyphicon-calendar"></i>
+                                                            </button>
+                                                        </span>
+                                                    </div>
+                                                </td>
+                                                <td class="setWidth contact">
+                                                    <br>
+                                                    <div>&nbsp;Entre las&nbsp;</div>
+                                                </td>
+                                                <td style="width: 90px;"> style="width: 20%;"
+                                                    <br>
+                                                    <ui-select id="cbxReofHoraIni" ng-model="solucion.reofrecimiento.horaOfrecimientoIni.selected" theme="bootstrap"
+                                                               ng-disabled="solucion.reofrecimiento.disabled" reset-search-input="true">
+                                                        <ui-select-match allow-clear="true" placeholder="HH12">
+                                                            {{$select.selected.descripcion}}
+                                                        </ui-select-match>
+                                                        <ui-select-choices repeat="horaOfrecimiento in listaHorasOfrecimiento | filter: $select.search">
+                                                            <div ng-bind-html="horaOfrecimiento.descripcion | highlight: $select.search"></div>
+                                                        </ui-select-choices>
+                                                    </ui-select>
+                                                </td>
+                                                
+                                                <td>&nbsp;&nbsp;&nbsp;</td>
+                                                
+                                                <td class="setWidth contact">
+                                                    <br>
+                                                    <div class="radio radio-danger">
+                                                        <input type="radio" ng-model="solucion.reofrecimiento.horaOfrecIniAmPm"
+                                                               id="rdbOfrecIniAm" value="am">
+                                                        <label for="rdbOfrecIniAm">AM</label>
+                                                    </div>
+                                                </td>
+                                                
+                                                <td>&nbsp;&nbsp;</td>
+                                                
+                                                <td class="setWidth contact">
+                                                    <br>
+                                                    <div class="radio radio-danger">
+                                                        <input type="radio" ng-model="solucion.reofrecimiento.horaOfrecIniAmPm"
+                                                               id="rdbOfrecIniPm" value="pm">
+                                                        <label for="rdbOfrecIniPm">PM</label>
+                                                    </div>
+                                                </td>
+                                                
+                                                <td class="setWidth contact">
+                                                    <br>
+                                                    <div>&nbsp;&nbsp;y las&nbsp;</div>
+                                                </td>
+                                                <td style="width: 90px;">
+                                                    <br>
+                                                    <ui-select id="cbxReofHoraFin" ng-model="solucion.reofrecimiento.horaOfrecimientoFin.selected" 
+                                                               ng-disabled="solucion.reofrecimiento.disabled" theme="bootstrap" reset-search-input="true">
+                                                        <ui-select-match allow-clear="true" placeholder="HH24">
+                                                            {{$select.selected.descripcion}}
+                                                        </ui-select-match>
+                                                        <ui-select-choices repeat="horaOfrecimiento in listaHorasOfrecimiento | filter: $select.search">
+                                                            <div ng-bind-html="horaOfrecimiento.descripcion | highlight: $select.search"></div>
+                                                        </ui-select-choices>
+                                                    </ui-select>
+                                                </td>
+                                                
+                                                <td>&nbsp;&nbsp;&nbsp;</td>
+                                                
+                                                <td class="setWidth contact">
+                                                    <br>
+                                                    <div class="radio radio-danger">
+                                                        <input type="radio" ng-model="solucion.reofrecimiento.horaOfrecFinAmPm"
+                                                               id="rdbOfrecFinAm" value="am">
+                                                        <label for="rdbOfrecFinAm">AM</label>
+                                                    </div>
+                                                </td>
+                                                
+                                                <td>&nbsp;&nbsp;</td>
+                                                
+                                                <td class="setWidth contact">
+                                                    <br>
+                                                    <div class="radio radio-danger">
+                                                        <input type="radio" ng-model="solucion.reofrecimiento.horaOfrecFinAmPm"
+                                                               id="rdbOfrecFinPm" value="pm">
+                                                        <label for="rdbOfrecFinPm">PM</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    <div class="checkbox checkbox-warning">
+                                        <input type="checkbox" id="chkNuevaDireccion"
+                                                ng-checked="solucion.reofrecimiento.nuevaDireccion"
+                                                ng-disabled="solucion.reofrecimiento.disabled"
+                                                ng-click="checkNuevaDireccion()">
+                                        <label for="chkNuevaDireccion">Nueva direcci&oacute;n</label>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-sm-2">
+                                    <div class="radio radio-danger">
+                                        <input type="radio" ng-model="solucion.reofrecimiento.tipoDireccion"
+                                               ng-click="limpiarDireccion()"
+                                               ng-disabled="!solucion.reofrecimiento.nuevaDireccion"
+                                               id="rdbDirUrbana" value="urbana">
+                                        <label for="rdbDirUrbana">Urbana</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-2">
+                                    <div class="radio radio-danger">
+                                        <input type="radio" ng-model="solucion.reofrecimiento.tipoDireccion"
+                                               ng-click="limpiarDireccion()"
+                                               ng-disabled="!solucion.reofrecimiento.nuevaDireccion"
+                                               id="rdbDirRural" value="rural">
+                                        <label for="rdbDirRural">Rural</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div ng-switch="solucion.reofrecimiento.tipoDireccion">
+                                <div ng-switch-when="urbana">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <table style="width: 100%;">
+                                                <tbody>
+                                                    <tr>
+                                                        <td style="width: 20%;" class="text-center">
+                                                            <div style="width: 95%;">
+                                                                <ui-select id="cbxTipoNomenclatura" ng-model="solucion.reofrecimiento.tipoNomenclatura.selected" theme="bootstrap"
+                                                                           reset-search-input="true" on-select="obtenerDireccionUrbana()"
+                                                                           ng-disabled="!solucion.reofrecimiento.nuevaDireccion">
+                                                                    <ui-select-match allow-clear="true" placeholder="SELECCIONAR">
+                                                                        {{$select.selected.liva_descripcion}}
+                                                                    </ui-select-match>
+                                                                    <ui-select-choices repeat="tipoNomenclatura in listaTipoNomenclatura | filter: $select.search">
+                                                                        <div ng-bind-html="tipoNomenclatura.liva_descripcion | highlight: $select.search"></div>
+                                                                    </ui-select-choices>
+                                                                </ui-select>
+                                                            </div>
+                                                        </td>
+
+                                                        <td style="width: 14%;" class="text-center">
+                                                            <input id="txtDirUrbanaUno" type="text" maxlength="50" class="input-sm form-control"
+                                                                   ng-keyup="obtenerDireccionUrbana()"
+                                                                   ng-model="solucion.reofrecimiento.dirUrbanaUno"
+                                                                   ng-disabled="!solucion.reofrecimiento.nuevaDireccion">
+                                                        </td>
+
+                                                        <td style="width: 2%;" class="text-center">#</td>
+
+                                                        <td style="width: 14%;" class="text-center">
+                                                            <div style="width: 95%;">
+                                                                <input id="txtDirUrbanaDos" type="text" maxlength="50" class="input-sm form-control"
+                                                                       ng-keyup="obtenerDireccionUrbana()"
+                                                                       ng-model="solucion.reofrecimiento.dirUrbanaDos"
+                                                                       ng-disabled="!solucion.reofrecimiento.nuevaDireccion">
+                                                            </div>
+                                                        </td>
+
+                                                        <td style="width: 1%;" class="text-center">-</td>
+
+                                                        <td style="width: 14%;" class="text-center">
+                                                            <div style="width: 95%;">
+                                                                <input id="txtDirUrbanaTres" type="text" maxlength="50" class="input-sm form-control"
+                                                                       ng-keyup="obtenerDireccionUrbana()"
+                                                                       ng-model="solucion.reofrecimiento.dirUrbanaTres"
+                                                                       ng-disabled="!solucion.reofrecimiento.nuevaDireccion">
+                                                            </div>
+                                                        </td>
+
+                                                        <td style="width: 20%;" class="text-center">
+                                                            <div style="width: 95%;">
+                                                                <ui-select id="cbxTipoPropiedad" ng-model="solucion.reofrecimiento.tipoPropiedad.selected" theme="bootstrap"
+                                                                           reset-search-input="true" on-select="obtenerDireccionUrbana()"
+                                                                           ng-disabled="!solucion.reofrecimiento.nuevaDireccion">
+                                                                    <ui-select-match allow-clear="true" placeholder="SELECCIONAR">
+                                                                        {{$select.selected.liva_descripcion}}
+                                                                    </ui-select-match>
+                                                                    <ui-select-choices repeat="tipoPropiedad in listaTipoPropiedad | filter: $select.search">
+                                                                        <div ng-bind-html="tipoPropiedad.liva_descripcion | highlight: $select.search"></div>
+                                                                    </ui-select-choices>
+                                                                </ui-select>
+                                                            </div>
+                                                        </td>
+
+                                                        <td style="width: 15%;" class="text-center">
+                                                            <input id="txtDirUrbanaCuatro" type="text" maxlength="50" class="input-sm form-control"
+                                                                   ng-keyup="obtenerDireccionUrbana()"
+                                                                   ng-model="solucion.reofrecimiento.dirUrbanaCuatro"
+                                                                   ng-disabled="!solucion.reofrecimiento.nuevaDireccion">
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <br>
+
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <span style="color: #7A7E7F;">{{solucion.reofrecimiento.caseNuevaDireccion}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div ng-switch-when="rural" class="row">
+                                    <div class="col-sm-12">
+                                        <input id="txtDirRural" type="text" maxlength="200" class="input-sm form-control"
+                                               ng-model="solucion.reofrecimiento.caseNuevaDireccion"
+                                               ng-disabled="!solucion.reofrecimiento.nuevaDireccion">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </uib-accordion>
+            </div>
+                
+            <div ng-if="idTipoSolucion === TIPO_SOL_PROCEDIMIENTO">
+                <uib-accordion close-others="false">
+                    <div uib-accordion-group class="panel-primary" is-open="true" heading="Soluci&oacute;n a novedades - Procedimiento">
+
+                        <div style="margin-left: 1%; margin-right: 1%;">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    Contacto cliente *
+                                    <input id="txtProcContactoCliente" type="text" maxlength="190" class="input-sm form-control"
+                                           ng-disabled="solucion.procedimiento.disabled"
+                                           ng-model="solucion.procedimiento.caseContactoCliente">
+                                </div>
+                                <div class="col-sm-6">
+                                    Funcionario TCC que respalda soluci&oacute;n
+                                    <input id="txtProcFrioTcc" type="text" maxlength="190" class="input-sm form-control"
+                                           ng-disabled="solucion.procedimiento.disabled"
+                                           ng-model="solucion.procedimiento.caseFrioParticipe">
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    Detalle (M&iacute;nimo {{minCaracteresObs}} caracteres) *
+                                    <textarea id="txtProcDetalle" type="text" class="input-sm form-control" maxlength="250"
+                                              ng-disabled="solucion.procedimiento.disabled"
+                                              ng-model="solucion.procedimiento.caseSeguimiento"></textarea>
+                                    Caracteres: <strong>{{solucion.procedimiento.caseSeguimiento.length}}</strong>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    Tipo soluci&oacute;n procedimiento *
+                                    <ui-select id="cbxTipoSolProc" ng-model="solucion.procedimiento.tipoSolProc.selected" theme="bootstrap"
+                                               ng-disabled="solucion.procedimiento.disabled" reset-search-input="true">
+                                        <ui-select-match allow-clear="true" placeholder="SELECCIONAR">
+                                            {{$select.selected.liva_descripcion}}
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="tipoSolProc in listaTipoSolProc | filter: $select.search">
+                                            <div ng-bind-html="tipoSolProc.liva_descripcion | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    
+                                    Canal soluci&oacute;n
+                                    <ui-select ng-model="solucion.procedimiento.canalSolucion.selected" theme="bootstrap" reset-search-input="true">
+                                       <ui-select-match allow-clear="true" placeholder="SELECCIONAR">
+                                            {{$select.selected.liva_descripcion}}
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="canal in listaCanalesSolucion | filter: $select.search">
+                                            <div ng-bind-html="canal.liva_descripcion | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </uib-accordion>
+            </div>
+            -->
+        </div>
+    </div>
+    
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" ng-click="cancel();">
+            <span class="glyphicon glyphicon-remove"></span> Cancelar
+        </button>
+
+        <button type="button" class="btn btn-primary" ng-click="grabar();">
+            <span class="glyphicon glyphicon-floppy-disk"></span> Grabar soluci&oacute;n
+        </button>
+    </div>
+</div>

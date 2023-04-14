@@ -1,0 +1,133 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cancel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Unidades de la remesa {{numRemesa}}</h4>
+    </div>
+    
+    <div class="modal-body">
+        <div class="panel panel-primary">
+            <div class="panel-heading" role="tab">
+                <h2 class="panel-title">
+                    Lista de unidades ({{_listaUnidades.length}})
+                </h2>
+            </div>
+
+            <div class="panel-body">
+                <div class="table-responsive" style="height: 250px;">
+                    <table st-table="listaUnidades" st-safe-src="_listaUnidades" class="table table-condensed table-striped table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-center">&nbsp;</th>
+                                <th class="text-center">&nbsp;</th>
+                                <th class="text-center setWidth contact" st-sort="codigoUnidad">
+                                    <div>C&oacute;digo de unidad</div>
+                                </th>
+                                <th class="text-center setWidth contact" st-sort="tipoUnidad">
+                                    <div>Tipo de unidad</div>
+                                </th>
+                                <th class="text-center setWidth contact" st-sort="claseEmpaque">
+                                    <div>Clase de empaque</div>
+                                </th>
+                                <th class="text-center setWidth contact" st-sort="estadoUnidad">
+                                    <div>Estado de la unidad</div>
+                                </th>
+                                <th class="text-center setWidth contact" st-sort="tipoUbicacion">
+                                    <div>Tipo de ubicaci&oacute;n</div>
+                                </th>
+                                
+                                <th class="text-center setWidth contact" st-sort="codBarrasUbicacion">
+                                    <div>C&oacute;digo ubicaci&oacute;n actual</div>
+                                </th>
+                                
+                                <th class="text-center setWidth contact" st-sort="ubicacion">
+                                    <div>Ubicaci&oacute;n actual</div>
+                                </th>
+                                <th class="text-center setWidth contact" st-sort="ceOp">
+                                    <div>Regional ubicaci&oacute;n</div>
+                                </th>
+                                <th class="text-center setWidth contact" st-sort="movilEntrega">
+                                    <div>M&oacute;vil entrega</div>
+                                </th>
+                                <th class="text-center setWidth contact" st-sort="certificacion">
+                                    <div>Certificaci&oacute;n</div>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th>&nbsp;</th>
+                                <th colspan="10">
+                                    <input st-search placeholder="Buscar" class="input-sm form-control" type="search"/>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="unidad in listaUnidades">
+                                <td>
+                                    <button class="btn btn-xs btn-danger" title="Ver trazabilidad." ng-click="verTrazaUnidad( unidad )">
+                                        <span class="glyphicon glyphicon-info-sign"></span>
+                                    </button>
+                                </td>
+                                
+                                <td>
+                                    <button class="btn btn-xs btn-warning" title="Ver novedades de la unidad."
+                                            ng-disabled="!unidad.tieneNovedad"
+                                            ng-click="verNovedadesUnidad( unidad )">
+                                        <span class="glyphicon glyphicon-warning-sign"></span>
+                                    </button>
+                                </td>
+
+                                <td class="setWidth contact">
+                                    <div>{{unidad.codigoUnidad}}</div>
+                                </td>
+
+                                <td class="setWidth contact">
+                                    <div>{{unidad.tipoUnidad}}</div>
+                                </td>
+
+                                <td class="setWidth contact">
+                                    <div>{{unidad.claseEmpaque}}</div>
+                                </td>
+
+                                <td class="setWidth contact">
+                                    <div>{{unidad.estadoUnidad}}</div>
+                                </td>
+
+                                <td class="setWidth contact">
+                                    <div>{{unidad.tipoUbicacion}}</div>
+                                </td>
+                                
+                                <td class="setWidth contact">
+                                    <div>{{unidad.codBarrasUbicacion}}</div>
+                                </td>
+
+                                <td class="setWidth contact">
+                                    <div>{{unidad.ubicacion}}</div>
+                                </td>
+
+                                <td class="setWidth contact">
+                                    <div>{{unidad.ceOp}}</div>
+                                </td>
+                                
+                                <td class="setWidth contact">
+                                    <div>{{unidad.movilEntrega}}</div>
+                                </td>
+                                
+                                <td class="setWidth contact">
+                                    <div>{{unidad.certificacion}}</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="cancel()">
+            <span class="glyphicon glyphicon-remove"></span> Cerrar
+        </button>
+    </div>
+</div>

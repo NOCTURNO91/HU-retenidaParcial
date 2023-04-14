@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+
+ 
+
+    <!--Definicion de objetos DAO-->
+    
+    <bean id="ListaValoresDAO" class="galileo.componentes.maestras.data.ListaValoresDAO" ></bean>
+    
+    <!--
+    <bean id="Localizacion1DAO" class="galileo.base.remesas.maestras.data.localizacion.Localizacion1DAO" ></bean>
+    <bean id="PlaneacionViajeDAO" class="galileo.base.prnacional.maestras.data.planeacionviajes.PlaneacionViajeDAO" ></bean>
+    -->
+
+    <!--Definicion de objetos Manager-->
+    
+    <bean id="MgrListaValores" class="galileo.componentes.maestras.manager.MgrListaValores" ></bean>
+    
+    <!--
+    <bean id="MgrLocalizacion1" class="galileo.base.remesas.maestras.manager.localizacion.MgrLocalizacion1" ></bean>
+    <bean id="MgrPlaneacionViaje" class="galileo.base.prnacional.maestras.manager.planeacionviaje.MgrPlaneacionViaje" ></bean>
+    -->
+
+    <!--Definicion de objetos SF-->
+    
+    <bean id="SFListaValoresLocal" class="galileo.componentes.maestras.facade.SFListaValoresLocal" ></bean>
+    
+    <!--
+    <bean id="SFLocalizacion1" class="galileo.base.remesas.maestras.facade.localizacion.SFLocalizacion1" ></bean>
+    <bean id="SFPlaneacionViaje" class="galileo.base.prnacional.maestras.facade.planeacionviaje.SFPlaneacionViaje" ></bean>
+    -->
+
+    <!--Definicion de objetos Command-->
+    
+    <bean id="CmdListaValores" class="galileo.componentes.maestras.command.CmdListaValores" ></bean>
+    
+    <!--
+    <bean id="CmdLocalizacion1" class="galileo.base.remesas.maestras.command.localizacion.CmdLocalizacion1" ></bean>
+    <bean id="CmdPlaneacionViaje" class="galileo.base.prnacional.maestras.command.planeacionviaje.CmdPlaneacionViaje" ></bean>
+    -->
+    
+    <bean id="CmdListas" class="galileo.base.prnacional.command.listas.CmdListas" ></bean>
+    <bean id="SFListas" class="galileo.base.prnacional.maestras.facade.listas.SFListas" ></bean>
+    <bean id="MgrListas" class="galileo.base.prnacional.maestras.manager.listas.MgrListas" ></bean>
+    <bean id="ListasDAO" class="galileo.base.prnacional.maestras.data.listas.ListasDAO" ></bean>
+ 
+    <bean id="CmdUsuarioServlet" class="galileo.base.prnacional.maestras.command.usuarioservlet.CmdUsuarioServlet" ></bean>
+    <bean id="SFUsuarioServlet" class="galileo.base.prnacional.maestras.facade.usuarioservlet.SFUsuarioServlet" ></bean>
+    <bean id="MgrUsuarioServlet" class="galileo.base.prnacional.maestras.manager.usuarioservlet.MgrUsuarioServlet"></bean>
+    <bean id="UsuarioServletDAO" class="galileo.base.prnacional.maestras.data.usuarioservlet.UsuarioServletDAO"></bean>
+ 
+    <bean id="CmdLocalizacion" class="galileo.base.prnacional.maestras.command.localizacion.CmdLocalizacion" ></bean>
+    <bean id="SFLocalizacion" class="galileo.base.prnacional.maestras.facade.localizacion.SFLocalizacion" ></bean>
+    <bean id="MgrLocalizacion" class="galileo.base.prnacional.maestras.manager.localizacion.MgrLocalizacion" ></bean>
+    <bean id="LocalizacionDAO" class="galileo.base.prnacional.maestras.data.localizacion.LocalizacionDAO" ></bean>
+    
+    <bean id="CmdUnidadNegocios" class="galileo.componentes.maestras.command.CmdUnidadNegocios" ></bean>
+    <bean id="SFUnidadNegociosLocal" class="galileo.componentes.maestras.facade.SFUnidadNegociosLocal" ></bean>
+    <bean id="MgrUnidadNegocios" class="galileo.componentes.maestras.manager.MgrUnidadNegocios" ></bean>
+    <bean id="UnidadNegociosDAO" class="galileo.componentes.maestras.data.UnidadNegociosDAO" ></bean>
+    
+    <bean id="SFClientesServices" class="galileo.componentes.maestras.facade.SFClientesServices" ></bean>
+    <bean id="MgrCliente" class="galileo.componentes.maestras.manager.MgrCliente" ></bean>
+    <bean id="ClientesDAO" class="galileo.componentes.maestras.data.ClientesDAO" ></bean>
+ 
+    <!--
+    <bean id="MgrImpresion" class="co.com.tcc.novedadesmasivas.manager.impresion.MgrImpresion" ></bean>
+    <bean id="ImpresionDAO" class="co.com.tcc.novedadesmasivas.dao.impresion.ImpresionDAO" ></bean>
+    -->
+ 
+    <bean id="local" class="galileo.base.conexion.OracleDAOFactoryLocal" ></bean> 
+    <bean id="serverrunner" class="galileo.base.conexion.OracleDAOFactoryRemote" ></bean>
+    
+</beans>

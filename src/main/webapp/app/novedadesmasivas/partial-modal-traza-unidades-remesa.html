@@ -1,0 +1,106 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cancel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Trazabilidad de la unidad {{numUnidad}}</h4>
+    </div>
+    
+    <div class="modal-body">
+        <div class="panel panel-primary">
+            <div class="panel-heading" role="tab">
+                <h2 class="panel-title">
+                    Lista de registros ({{_listaTrazaUnidades.length}})
+                </h2>
+            </div>
+
+            <div class="panel-body">
+                <div class="table-responsive" style="height: 250px;">
+                    <table st-table="listaTrazaUnidades" st-safe-src="_listaTrazaUnidades" class="table table-condensed table-striped table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-center setWidth contact" st-sort="fechaTraza">
+                                    <div>Fecha evento</div>
+                                </th>
+                                <th class="text-center setWidth contact" st-sort="estadoTraza">
+                                    <div>Estado</div>
+                                </th>
+                                <th class="text-center setWidth contact" st-sort="proceso">
+                                    <div>Proceso</div>
+                                </th>
+                                <th class="text-center setWidth contact" st-sort="ciudadProceso">
+                                    <div>CeOp proceso</div>
+                                </th>
+                                <th class="text-center setWidth contact" st-sort="tipoUbicacion">
+                                    <div>Tipo ubicaci&oacute;n</div>
+                                </th>
+                                <th class="text-center setWidth contact" st-sort="codBarrasUbicacion">
+                                    <div>C&oacute;digo ubicaci&oacute;n</div>
+                                </th>
+                                <th class="text-center setWidth contact" st-sort="descUbicacion">
+                                    <div>Ubicaci&oacute;n</div>
+                                </th>
+                                <th class="text-center setWidth contact" st-sort="usuario">
+                                    <div>Usuario</div>
+                                </th>
+                                <th class="text-center setWidth contact" st-sort="observaciones">
+                                    <div>Observaciones</div>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th colspan="9">
+                                    <input st-search placeholder="Buscar" class="input-sm form-control" type="search"/>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="trazaUnidad in listaTrazaUnidades">
+                                <td class="setWidth contact">
+                                    <div>{{trazaUnidad.fechaTraza}}</div>
+                                </td>
+                                
+                                <td class="setWidth contact">
+                                    <div>{{trazaUnidad.estadoTraza}}</div>
+                                </td>
+
+                                <td class="setWidth contact">
+                                    <div>{{trazaUnidad.proceso}}</div>
+                                </td>
+
+                                <td class="setWidth contact">
+                                    <div>{{trazaUnidad.ciudadProceso}}</div>
+                                </td>
+
+                                <td class="setWidth contact">
+                                    <div>{{trazaUnidad.tipoUbicacion}}</div>
+                                </td>
+
+                                <td class="setWidth contact">
+                                    <div>{{trazaUnidad.codBarrasUbicacion}}</div>
+                                </td>
+
+                                <td class="setWidth contact">
+                                    <div>{{trazaUnidad.descUbicacion}}</div>
+                                </td>
+
+                                <td class="setWidth contact">
+                                    <div>{{trazaUnidad.usuario}}</div>
+                                </td>
+                                
+                                <td class="setWidth contact">
+                                    <div>{{trazaUnidad.observaciones}}</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="cancel()">
+            <span class="glyphicon glyphicon-remove"></span> Cerrar
+        </button>
+    </div>
+</div>

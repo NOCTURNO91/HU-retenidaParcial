@@ -1,0 +1,102 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cancel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Novedades de la unidad {{numUnidad}}</h4>
+    </div>
+    
+    <div class="modal-body">
+        <div class="panel panel-primary">
+            <div class="panel-heading" role="tab">
+                <h2 class="panel-title">
+                    Lista de registros ({{_listaNovedadesUnidad.length}})
+                </h2>
+            </div>
+
+            <div class="panel-body">
+                <div class="table-responsive" style="height: 250px;">
+                    <table st-table="listaNovedadesUnidad" st-safe-src="_listaNovedadesUnidad" class="table table-condensed table-striped table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th class="text-center setWidth contact" st-sort="fechaNovedad">
+                                    <div>Fecha novedad</div>
+                                </th>
+                                <th class="text-center setWidth contact" st-sort="codNovedad">
+                                    <div>C&oacute;digo novedad</div>
+                                </th>
+                                <th class="text-center setWidth contact" st-sort="novedad">
+                                    <div>Novedad</div>
+                                </th>
+                                <th class="text-center setWidth contact" st-sort="comentarios">
+                                    <div>Comentarios</div>
+                                </th>
+                                <th class="text-center setWidth contact" st-sort="ceOpPlantea">
+                                    <div>CeOp plantea</div>
+                                </th>
+                                <th class="text-center setWidth contact" st-sort="proceso">
+                                    <div>Proceso</div>
+                                </th>
+                                <th class="text-center setWidth contact" st-sort="usuario">
+                                    <div>Usuario</div>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th colspan="7">
+                                    <input st-search placeholder="Buscar" class="input-sm form-control" type="search"/>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="novedadUnidad in listaNovedadesUnidad">
+                                <td>
+                                    <button ng-disabled="novedadUnidad.foto.length === 0"
+                                            ng-click="obtenerImagenes( novedadUnidad )"
+                                            class="btn btn-xs btn-success" uib-tooltip="Ver im&aacute;genes.">
+                                        <span class="glyphicon glyphicon-camera"></span>
+                                    </button>
+                                </td>
+                                
+                                <td class="setWidth contact">
+                                    <div>{{novedadUnidad.fechaNovedad}}</div>
+                                </td>
+                                
+                                <td class="setWidth contact">
+                                    <div>{{novedadUnidad.codNovedad}}</div>
+                                </td>
+                                
+                                <td class="setWidth contact">
+                                    <div>{{novedadUnidad.novedad}}</div>
+                                </td>
+                                
+                                <td class="setWidth contact">
+                                    <div>{{novedadUnidad.comentarios}}</div>
+                                </td>
+                                
+                                <td class="setWidth contact">
+                                    <div>{{novedadUnidad.ceOpPlantea}}</div>
+                                </td>
+                                
+                                <td class="setWidth contact">
+                                    <div>{{novedadUnidad.proceso}}</div>
+                                </td>
+                                
+                                <td class="setWidth contact">
+                                    <div>{{novedadUnidad.usuario}}</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="cancel()">
+            <span class="glyphicon glyphicon-remove"></span> Cerrar
+        </button>
+    </div>
+</div>

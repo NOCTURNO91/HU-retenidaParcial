@@ -1,0 +1,55 @@
+#wrapper {
+    margin-left: 200px;
+}
+
+#sidebar {
+    float: left;
+    width: 200px;
+    margin-left: -200px;
+    background-color: #FFA;
+}
+
+#cleared {
+    clear: both;
+}
+
+.tab-derecho {
+    position: fixed;
+    top: 20%;
+    right: 0;
+    width: 230px;
+}
+
+.accordion-fijo {
+    overflow-x: scroll;
+    height: 150px;
+    overflow-x: hidden;
+}
+
+.top-margen-fila {
+    margin-top:5px;
+}
+
+.tr-clicked {
+    background-color: #d8d8d8;
+}
+
+.top-row {
+    padding-top: 5px;
+}
+
+.marco{
+    margin-left: 111px;
+    margin-top: 5px;
+    border: 1px solid #c2c2c2;
+    padding: 5px;
+    width: 430px;
+}
+
+.buscar{
+      width: 430px;
+}
+
+.textoIUP{
+    color:#dc1921;
+}
