@@ -419,6 +419,7 @@ function modalIngresoNovedadController($scope, $uibModalInstance, Alert, Novedad
         if (ingresoNovedad === null) {
             return;
         }
+        
 
         if($scope.isProcesoDistribucion && !$scope.administrador){
             Alert.abrir("El usuario no es administrador, no puede grabar novedades con proceso distribuci\u00F3n.", $uibModalInstance.close);
@@ -498,15 +499,14 @@ function modalIngresoNovedadController($scope, $uibModalInstance, Alert, Novedad
 
     $scope.arre =[]
     $scope.mensaje = {
-        todo:null,
-        uno:null,
-        dos:null,
-        tres:null
+        uno:false,
+        dos:false,
+        tres:false
     }    
     $scope.contador = 0
     $scope.checkIUP = function(detalle, valor){
         if($scope.arre.includes(detalle)){
-            console.log("Boorar")
+            
             for( var i = 0; i < $scope.arre.length; i++){ 
                 if ( $scope.arre[i] === detalle) { 
                     $scope.arre.splice(i, 1); 
@@ -518,20 +518,37 @@ function modalIngresoNovedadController($scope, $uibModalInstance, Alert, Novedad
         }
         
         
-        
+        console.log($scope.mensaje)
         $scope.contador = $scope.arre.length
         
         
         
-        console.log($scope.arre)
-        console.log(conta)
+        console.log($scope.arre);
+        console.log($scope.contador);
     }
-    //$scope.paramsIngreso.totalUnidades = $scope.mensaje.length-1;
+    
+    $scope.checktodo = function () {
+        $scope.mensaje.uno = true
+        $scope.mensaje.dos = true
+        $scope.mensaje.tres = true
+    };
+    
+    $scope.mensaje2 = function (){
+      var novedadPpalSel = $scope.paramsIngreso.novedadPpal.selected || {};
+        var novedadPpalIdInt = novedadPpalSel.idInt || 0;
+
+        if($scope.mensaje.uno===false&&$scope.mensaje.dos===false&&$scope.mensaje.tres===false){
+            console.log("Debe ser obligatorio seleccionar  minimo 1 IUP")
+            return null;
+    }
+}
+    
+    
     $scope._validarObligatorios = function () {
         var novedadPpalSel = $scope.paramsIngreso.novedadPpal.selected || {};
         var novedadPpalIdInt = novedadPpalSel.idInt || 0;
 
-        if($scope.mensaje.todo===null){
+           if($scope.contador==0){
             console.log("Falta el check")
             return null;
         }

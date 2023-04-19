@@ -76,12 +76,13 @@
                         <div class="prueba">
                             <input type="checkbox" ng-click="checkIUP(0,value)" ng-model="mensaje.todo" >
                             <label for="vehicle1">Seleccionar todo</label><br>
-                            <input type="checkbox" ng-click="checkIUP(1,value)" ng-model="mensaje.uno">
+                            <input type="checkbox" ng-click="checkIUP(1,value)" ng-checked="mensaje.todo">
                             <label for="vehicle1"> TCCDA000345789</label><br>
-                            <input type="checkbox" ng-click="checkIUP(2,value)" ng-model="mensaje.dos">
+                            <input type="checkbox" ng-click="checkIUP(2,value)" ng-checked="mensaje.todo">
                             <label for="vehicle1">TCCDA000345790</label><br>
-                            <input type="checkbox" ng-click="checkIUP(3, value)" ng-model="mensaje.tres">
+                            <input type="checkbox" ng-click="checkIUP(3, value)" ng-checked="mensaje.todo">
                             <label for="vehicle1">TCCDA000345791</label><br>
+                            <span class="alert mt-4 invisible" id="mensajec">Debe ser obligatorio seleccionar  minimo 1 IUP</span>
                         </div>
                     </div>
                 </div>

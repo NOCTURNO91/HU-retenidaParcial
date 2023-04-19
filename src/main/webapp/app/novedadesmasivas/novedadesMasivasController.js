@@ -209,7 +209,7 @@ function novedadesMasivasController($scope, $uibModal, $http, Alert, UtilService
     }
 
     $scope.setSeleccionarTodosServicios = function (seleccionado) {
-
+        console.log(seleccionado);
         var conteo = 0;
 
         var filasVisibles = $scope.gridApi.core.getVisibleRows();
