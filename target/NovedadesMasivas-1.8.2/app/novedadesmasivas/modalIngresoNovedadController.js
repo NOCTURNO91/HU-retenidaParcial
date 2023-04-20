@@ -498,12 +498,15 @@ function modalIngresoNovedadController($scope, $uibModalInstance, Alert, Novedad
     };
 
     $scope.arre =[]
+    
     $scope.mensaje = {
         uno:false,
         dos:false,
         tres:false
     }    
+    
     $scope.contador = 0
+    
     $scope.checkIUP = function(detalle, valor){
         if($scope.arre.includes(detalle)){
             
@@ -533,15 +536,6 @@ function modalIngresoNovedadController($scope, $uibModalInstance, Alert, Novedad
         $scope.mensaje.tres = true
     };
     
-    $scope.mensaje2 = function (){
-      var novedadPpalSel = $scope.paramsIngreso.novedadPpal.selected || {};
-        var novedadPpalIdInt = novedadPpalSel.idInt || 0;
-
-        if($scope.mensaje.uno===false&&$scope.mensaje.dos===false&&$scope.mensaje.tres===false){
-            console.log("Debe ser obligatorio seleccionar  minimo 1 IUP")
-            return null;
-    }
-}
     
     
     $scope._validarObligatorios = function () {
@@ -549,7 +543,7 @@ function modalIngresoNovedadController($scope, $uibModalInstance, Alert, Novedad
         var novedadPpalIdInt = novedadPpalSel.idInt || 0;
 
            if($scope.contador==0){
-            console.log("Falta el check")
+            Alert.abrir("Debe ser obligatorio seleccionar  minimo 1 IUP");
             return null;
         }
 
