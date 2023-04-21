@@ -72,21 +72,21 @@
                 <div class="container my-5" id="IUP_RETENIDAS" ng-show="isvisibleIup">
                     <span class="btn-text textoIUP">IUP RETENIDAS</span>
                     <input type="text" id="html" name="Buscar" class="buscar" required='' placeholder="Buscar">
+                    
                     <div class="select-btn marco">
                         <div class="prueba">
-                            <input type="checkbox" ng-click="checkIUP(0,value)" ng-model="mensaje.todo" >
-                            <label for="vehicle1">Seleccionar todo</label><br>
-                            <input type="checkbox" ng-click="checkIUP(1,value)" ng-checked="mensaje.todo">
-                            <label for="vehicle1"> TCCDA000345789</label><br>
-                            <input type="checkbox" ng-click="checkIUP(2,value)" ng-checked="mensaje.todo">
-                            <label for="vehicle1">TCCDA000345790</label><br>
-                            <input type="checkbox" ng-click="checkIUP(3, value)" ng-checked="mensaje.todo">
-                            <label for="vehicle1">TCCDA000345791</label><br>
+                            <label> 
+                                <input type="checkbox" ng-model="selectAll" ng-change="toggleAll()"> Seleccionar todo 
+                            </label>
+                            <div ng-repeat="item in items track by $index"> 
+                                <input type="checkbox" ng-model="item.checked" ng-click="checkIUP($index)">
+                                {{ item.text }} 
+                            </div>
                             <span class="alert mt-4 invisible" id="mensajec">Debe ser obligatorio seleccionar  minimo 1 IUP</span>
                         </div>
                     </div>
                 </div>
-
+                
                 <div class="row">
                     <div class="col-sm-4">
                         Fecha de planteamiento en sistema
@@ -127,7 +127,7 @@
                                     </td>
                                     <td>
                                         <div style="width: 90%;">
-                                            <input type="text" class="form-control" ng-model="paramsIngreso.totalUnidades" ng-disabled="true">
+                                            <input type="text" class="form-control" ng-model="items.length" ng-disabled="true">
                                         </div>
                                     </td>
                                 </tr>

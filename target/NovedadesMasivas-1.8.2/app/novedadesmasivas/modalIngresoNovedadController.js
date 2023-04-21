@@ -497,46 +497,36 @@ function modalIngresoNovedadController($scope, $uibModalInstance, Alert, Novedad
         NovedadesMasivasApi.save({action: "grabarNovedades", remeIdInt: null, ipidIdInt: null}, ingresoNovedad).$promise.then(success, error);
     };
 
-    $scope.arre =[]
     
-    $scope.mensaje = {
-        uno:false,
-        dos:false,
-        tres:false
-    }    
     
-    $scope.contador = 0
+    $scope.contador = 0;
     
-    $scope.checkIUP = function(detalle, valor){
-        if($scope.arre.includes(detalle)){
-            
-            for( var i = 0; i < $scope.arre.length; i++){ 
-                if ( $scope.arre[i] === detalle) { 
-                    $scope.arre.splice(i, 1); 
+    $scope.DataIup=['TCCDA000345789','TCCDA000345790','TCCDA000345790'];
+    $scope.items = [ {text: 'TCCDA000345789', checked: false}, {text: 'TCCDA000345790', checked: false}, {text: 'TCCDA000345791', checked: false}];
+    $scope.toggleAll = function() {
+        angular.forEach($scope.items, function(item) {
+            if($scope.selectAll==true){
+                if(item.checked == false){
+                    $scope.contador = $scope.contador+1
+                }
+            }else{
+                if(item.checked == true){
+                    $scope.contador = $scope.contador-1
                 }
             }
-            
-        }else{
-            $scope.arre.push(detalle)
-        }
-        
-        
-        console.log($scope.mensaje)
-        $scope.contador = $scope.arre.length
-        
-        
-        
-        console.log($scope.arre);
-        console.log($scope.contador);
-    }
-    
-    $scope.checktodo = function () {
-        $scope.mensaje.uno = true
-        $scope.mensaje.dos = true
-        $scope.mensaje.tres = true
+            item.checked = $scope.selectAll;
+        });
     };
+   
     
-    
+    $scope.checkIUP = function(index){
+        if($scope.items[index].checked==true){
+            $scope.contador = $scope.contador-1
+        }else{
+            $scope.contador = $scope.contador+1
+        }
+    }
+
     
     $scope._validarObligatorios = function () {
         var novedadPpalSel = $scope.paramsIngreso.novedadPpal.selected || {};
