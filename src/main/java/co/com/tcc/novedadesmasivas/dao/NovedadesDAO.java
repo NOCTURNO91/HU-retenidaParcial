@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -32,6 +33,8 @@ import java.util.List;
 import java.util.Map;
 import oracle.jdbc.OracleCallableStatement;
 import oracle.jdbc.OracleTypes;
+import oracle.sql.ARRAY;
+import oracle.sql.ArrayDescriptor;
 import org.springframework.stereotype.Component;
 
 /**
@@ -1432,12 +1435,89 @@ public class NovedadesDAO implements INovedadesDAO {
 
     }
 
-    public JsonReturn consultarIUPRemesa(Remesa remesa, DAOfactory dao) throws DAOException {
+    public JsonReturn consultarIUPRemesa(Integer[] remesas, DAOfactory dao) throws DAOException {
          JsonReturn jsonReturn = new JsonReturn();
-         StructAdapter structAdapter = new StructAdapter();
-         OracleCallableStatement comd = null;
-         
-         return jsonReturn;
+        StructAdapter structAdapter = new StructAdapter();
+        OracleCallableStatement comd = null;
+
+        ResultSet rs = null;
+
+        try {
+            Connection con = dao.getConexion();
+            Mensajes msg = new Mensajes();
+
+            comd = (oracle.jdbc.OracleCallableStatement) con.prepareCall("{ call WRAPPER_NOVEDADES_API.CONS_UNIDADES_REMESA_PRC( ?, ?, ? ) }");
+            Integer[] RemesasArray  =remesas;
+            Array  inputArray = con.createArrayOf("NUMBER", RemesasArray);
+            
+            comd.setARRAY(1, (ARRAY) inputArray);            
+            comd.registerOutParameter(2, oracle.jdbc.OracleTypes.CURSOR); //salida
+            comd.registerOutParameter(3, oracle.jdbc.OracleTypes.STRUCT, "OBJ_MENSAJES_T");//salida
+            // comd.registerOutParameter( 5, oracle.jdbc.OracleTypes.VARCHAR );
+
+            comd.execute();
+
+            // System.err.println( comd.getString(5) );
+            // Se le pasan los datos del objeto de retorno de mensajes
+            msg.setStruct(structAdapter.Struct(con, comd.getObject(3)));
+
+            if (msg.getMens_codigo_sistema() != 0) {
+                System.err.println(msg.getMens_codigo_sistema() + ": " + msg.getMens_descrip_sistema());
+
+                jsonReturn.setCodigo(-1)
+                        .setMensaje(msg.getMens_descrip_usuario());
+            } else {
+                rs = (ResultSet) comd.getObject(2);
+                ArrayList<Remesa> list = new ArrayList<Remesa>();
+
+
+                BigDecimal idInt;
+                Map<String, Integer> hashReturn = new HashMap<String, Integer>();
+
+                if (rs != null) {
+
+                    while (rs.next() == true) {
+
+                      Remesa  remesa = new Remesa();
+
+                      String remeIdInt = rs.getString("REME_ID_INT");
+                        remesa.setRemeIdInt(remeIdInt);
+               
+
+                        list.add(remesa);
+                     
+                    }
+                }
+
+
+                jsonReturn.setList(list)
+                        ;
+            }
+
+            return jsonReturn;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new DAOException(ex);
+        } catch (Throwable te) {
+            te.printStackTrace();
+            throw new DAOException(te);
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            if (comd != null) {
+                try {
+                    comd.close();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
     }
 
 }

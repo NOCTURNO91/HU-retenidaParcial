@@ -1,9 +1,0 @@
-#surefire
-#Tue Apr 18 13:22:07 COT 2023
-maven.ext.class.path=C\:\\Program Files\\NetBeans 8.2\\java\\maven-nblib\\netbeans-eventspy.jar
-user.dir=C\:\\Users\\cequiroz\\Documents\\NetBeansProjects\\NovedadesMasivas
-file.encoding=windows-1254
-localRepository=C\:\\Users\\cequiroz\\.m2\\repository
-netbeans.deploy=true
-netbeans.deploy.debugmode=true
-basedir=C\:\\Users\\cequiroz\\Documents\\NetBeansProjects\\NovedadesMasivas

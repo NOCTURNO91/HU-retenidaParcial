@@ -75,9 +75,9 @@
                     
                     <div class="select-btn marco">
                         <div class="prueba">
-                            <label> 
+                            <!--<label> 
                                 <input type="checkbox" ng-model="selectAll" ng-change="toggleAll()"> Seleccionar todo 
-                            </label>
+                            </label>-->
                             <div ng-repeat="item in items track by $index"> 
                                 <input type="checkbox" ng-model="item.checked" ng-click="checkIUP($index)">
                                 {{ item.text }} 

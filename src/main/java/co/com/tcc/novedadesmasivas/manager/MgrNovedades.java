@@ -1121,8 +1121,52 @@ public class MgrNovedades implements IMgrNovedades {
         return jsonReturn;
     }
 
-    public JsonReturn consultarIUPRemesa(Remesa[] remesa) throws MgrException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public JsonReturn consultarIUPRemesa( Integer[] remesa) throws MgrException {
+        for(int element:remesa){
+            System.out.print(element);
+        }
+        
+       DAOfactory dao = null;
+        JsonReturn jsonReturn = new JsonReturn();
+
+        try {
+            dao = DAOfactory.getDAOFactory();
+            dao.beginConexion();
+
+            jsonReturn = novedadesDAO.consultarIUPRemesa(remesa, dao);
+            dao.commit();
+        } catch (FactoryDAOException fdaoe) {
+            if (null != dao) {
+                try {
+                    dao.rollback();
+                } catch (Throwable t) {
+                    t.printStackTrace();
+                }
+            }
+
+            throw new MgrException(fdaoe);
+        } catch (DAOException daoe) {
+            if (null != dao) {
+                try {
+                    dao.rollback();
+                } catch (Throwable t) {
+                    t.printStackTrace();
+                }
+            }
+
+            throw new MgrException(daoe);
+        } finally {
+            if (null != dao) {
+                try {
+                    dao.closeConexion();
+                } catch (Throwable t) {
+                    System.err.println("La conexión no se pudo cerrar.");
+                    t.printStackTrace();
+                }
+            }
+        }
+
+        return jsonReturn;
     }
 
 

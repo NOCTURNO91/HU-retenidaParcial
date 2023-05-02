@@ -406,7 +406,11 @@ function modalIngresoNovedadController($scope, $uibModalInstance, Alert, Novedad
         if ($scope.validadorCodNov==987){
             console.log("Aqui se consume la funcion");
             //consumo de funcion
-            $scope._consultarIUPRemesa("12345");
+            var ArrayData = new Array();
+            ArrayData.push(439837839);
+             ArrayData.push(439837840);
+            console.log(ArrayData);
+            $scope._consultarIUPRemesa(ArrayData);
         }
     };
 
@@ -524,16 +528,23 @@ function modalIngresoNovedadController($scope, $uibModalInstance, Alert, Novedad
             $scope.contador = $scope.contador-1
         }else{
             $scope.contador = $scope.contador+1
+            if($scope.contador==$scope.items.length){
+                Alert.abrir("No ser\u00E1 posible selecci\u00F3nar la totalidad de las IUP");
+            }
         }
-    }
+    };
 
     
     $scope._validarObligatorios = function () {
         var novedadPpalSel = $scope.paramsIngreso.novedadPpal.selected || {};
         var novedadPpalIdInt = novedadPpalSel.idInt || 0;
 
-           if($scope.contador==0){
-            Alert.abrir("Debe ser obligatorio seleccionar  minimo 1 IUP");
+        if($scope.contador==0){
+            Alert.abrir("Debe ser obligatorio selecci\u00F3nar  minimo 1 IUP");
+            return null;
+        }
+        if($scope.contador==$scope.items.length){
+            Alert.abrir("No es posible selecci\u00F3nar todas las IUP");
             return null;
         }
 
@@ -1290,15 +1301,15 @@ function modalIngresoNovedadController($scope, $uibModalInstance, Alert, Novedad
         
     };
     
-    //autor carlosQuiroz 
+    //autor CarlosQuiroz 
     // FECHA: 12/04/23
     // HU: INTERVENCION MCIA RETENIDA PARCIAL
     
-    /*$scope._iupRemesa = function (){
+    //$scope._iupRemesa = function (ListaRemeIdInt){
         
-        console.log($select.selected.descripcion);
+        //console.log($select.selected.descripcion);
         //$select.selected.descripcion
-    };*/
+    //};
     
     
     

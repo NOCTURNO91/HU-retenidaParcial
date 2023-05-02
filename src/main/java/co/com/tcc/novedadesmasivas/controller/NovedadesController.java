@@ -725,9 +725,9 @@ public class NovedadesController
     @ResponseBody
     @ResponseStatus( HttpStatus.OK )
     @RequestMapping( value="/consultarIUPRemesa", method=RequestMethod.POST )
-    public JsonReturn consultarIUPRemesa( @RequestBody Remesa[] ListaRemesa){
+    public JsonReturn consultarIUPRemesa( @RequestBody Integer[] ListaRemesa){
         
-        System.out.print("ListaRemesa");
+        System.out.print(ListaRemesa[0]);
         JsonReturn jsonReturn = new JsonReturn();
             String _Respuesta = null;
             ArrayList<String> Lista = new ArrayList<String>();
@@ -751,12 +751,10 @@ public class NovedadesController
         }
             
             
-            Lista.add("1");
-            Lista.add("2");
-            Lista.add("3");
-            Lista.add("4");
-            Lista.add("5");
-            jsonReturn.setCodigo(0).setMensaje("aqui envio algo").setList(Lista);
+            
+            //jsonReturn.setCodigo(0).setMensaje("aqui envio algo").setList(Lista);
             return jsonReturn;
+            
+            
     }   
 }

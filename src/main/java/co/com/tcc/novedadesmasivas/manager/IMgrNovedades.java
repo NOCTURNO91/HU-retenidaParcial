@@ -36,5 +36,5 @@ public interface IMgrNovedades
     public JsonReturn consultarDiasHabiles(Util util) throws MgrException;
     public JsonReturn obtenerDiaHabil(Date fecha, Integer dias) throws MgrException;
     public JsonReturn validarEstadoGlobalRemesaIngresoNovedad(Remesa remesa) throws MgrException;
-    public JsonReturn consultarIUPRemesa( Remesa[] remesa ) throws MgrException;
+    public JsonReturn consultarIUPRemesa( Integer[] remesa ) throws MgrException;
 }
