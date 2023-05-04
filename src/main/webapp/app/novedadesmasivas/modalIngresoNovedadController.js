@@ -30,7 +30,7 @@ function modalIngresoNovedadController($scope, $uibModalInstance, Alert, Novedad
         $scope.numeroFechasHabiles = params.numeroDiasHabiles;
         $scope.minCaracteresObs = params.minCaracteresObs;
         $scope.numRemesas = Util.getObjectSize(params.remesas);
-        
+        $scope.listaRemesa =[];
         
         //HU:12772  @DATE:23/08/2021  @Author:Manuel Gallardo -- Softcaribbean        
         $scope.administrador = params.isAdmin;
@@ -41,8 +41,9 @@ function modalIngresoNovedadController($scope, $uibModalInstance, Alert, Novedad
             for (var remeIdInt in params.remesas) {
                 $scope.remesa = params.remesas[remeIdInt];
             }
-        }
         
+        $scope.listaRemesa=($scope.remesa.remeIdInt);
+        console.log($scope.listaRemesa);
         $scope.desactivarFechaReal = false;
         $scope.estadosRemesa.forEach(function (value) {
             if (parseInt(value) === $scope.validacionFechaReal){
@@ -59,7 +60,23 @@ function modalIngresoNovedadController($scope, $uibModalInstance, Alert, Novedad
                 }
             }
         });
-
+        
+       
+     
+        
+        }else{
+            $scope.remesa = params.remesas;
+            var ArrayDataCon =new Array();
+            for(var i=0;i<$scope.remesa.length;i++){
+                
+                ArrayDataCon.push($scope.remesa[i].remeIdInt);
+            }
+            
+         
+            $scope.listaRemesa = (ArrayDataCon.toString());
+            console.log($scope.listaRemesa);
+        }    
+            
         /*if ($scope.validacionFechaReal === null) {
             $scope.desactivarFechaReal = true;
         } else {
@@ -406,11 +423,10 @@ function modalIngresoNovedadController($scope, $uibModalInstance, Alert, Novedad
         if ($scope.validadorCodNov==987){
             console.log("Aqui se consume la funcion");
             //consumo de funcion
-            var ArrayData = new Array();
-            ArrayData.push(439837839);
-             ArrayData.push(439837840);
-            console.log(ArrayData);
-            $scope._consultarIUPRemesa(ArrayData);
+            
+            console.log($scope.listaRemesa);
+            
+            $scope._consultarIUPRemesa($scope.listaRemesa);
         }
     };
 

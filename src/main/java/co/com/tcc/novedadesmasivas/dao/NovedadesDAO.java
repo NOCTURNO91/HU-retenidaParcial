@@ -1435,7 +1435,7 @@ public class NovedadesDAO implements INovedadesDAO {
 
     }
 
-    public JsonReturn consultarIUPRemesa(Integer[] remesas, DAOfactory dao) throws DAOException {
+    public JsonReturn consultarIUPRemesa(String remesas, DAOfactory dao) throws DAOException {
          JsonReturn jsonReturn = new JsonReturn();
         StructAdapter structAdapter = new StructAdapter();
         OracleCallableStatement comd = null;
@@ -1447,10 +1447,10 @@ public class NovedadesDAO implements INovedadesDAO {
             Mensajes msg = new Mensajes();
 
             comd = (oracle.jdbc.OracleCallableStatement) con.prepareCall("{ call WRAPPER_NOVEDADES_API.CONS_UNIDADES_REMESA_PRC( ?, ?, ? ) }");
-            Integer[] RemesasArray  =remesas;
-            Array  inputArray = con.createArrayOf("NUMBER", RemesasArray);
+           // Integer[] RemesasArray  =remesas;
+           // Array  inputArray = con.createArrayOf("NUMBER", RemesasArray);
             
-            comd.setARRAY(1, (ARRAY) inputArray);            
+            comd.setString(1, remesas);
             comd.registerOutParameter(2, oracle.jdbc.OracleTypes.CURSOR); //salida
             comd.registerOutParameter(3, oracle.jdbc.OracleTypes.STRUCT, "OBJ_MENSAJES_T");//salida
             // comd.registerOutParameter( 5, oracle.jdbc.OracleTypes.VARCHAR );

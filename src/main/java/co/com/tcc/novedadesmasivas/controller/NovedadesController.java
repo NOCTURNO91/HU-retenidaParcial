@@ -725,9 +725,9 @@ public class NovedadesController
     @ResponseBody
     @ResponseStatus( HttpStatus.OK )
     @RequestMapping( value="/consultarIUPRemesa", method=RequestMethod.POST )
-    public JsonReturn consultarIUPRemesa( @RequestBody Integer[] ListaRemesa){
+    public JsonReturn consultarIUPRemesa( @RequestBody String ListaRemesa){
         
-        System.out.print(ListaRemesa[0]);
+        System.out.print(ListaRemesa);
         JsonReturn jsonReturn = new JsonReturn();
             String _Respuesta = null;
             ArrayList<String> Lista = new ArrayList<String>();

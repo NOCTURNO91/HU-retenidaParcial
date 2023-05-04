@@ -1121,10 +1121,8 @@ public class MgrNovedades implements IMgrNovedades {
         return jsonReturn;
     }
 
-    public JsonReturn consultarIUPRemesa( Integer[] remesa) throws MgrException {
-        for(int element:remesa){
-            System.out.print(element);
-        }
+    public JsonReturn consultarIUPRemesa( String remesa) throws MgrException {
+       
         
        DAOfactory dao = null;
         JsonReturn jsonReturn = new JsonReturn();

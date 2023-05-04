@@ -35,5 +35,5 @@ public interface INovedadesDAO
     public JsonReturn consultarDiasHabiles(Util util,DAOfactory dao) throws DAOException;
     public JsonReturn obtenerDiaHabil(Date fecha, Integer dias, DAOfactory dao) throws DAOException;
     public JsonReturn validarEstadoGlobalRemesaIngresoNovedad(Remesa remesa, DAOfactory dao ) throws DAOException;
-    public JsonReturn consultarIUPRemesa(Integer[] remesa, DAOfactory dao ) throws DAOException;
+    public JsonReturn consultarIUPRemesa(String remesa, DAOfactory dao ) throws DAOException;
 }
