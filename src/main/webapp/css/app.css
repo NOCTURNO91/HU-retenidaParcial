@@ -53,3 +53,9 @@
 .textoIUP{
     color:#dc1921;
 }
+
+.lupaBusqueda:before{
+    font-size: 16px;
+    font-family: "Font Awesome 5 Free";
+    font-weight: 200;
+}
