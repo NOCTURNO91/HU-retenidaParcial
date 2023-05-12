@@ -71,14 +71,17 @@
                 
                 <div class="container my-5" id="IUP_RETENIDAS" ng-show="isvisibleIup">
                     <span class="btn-text textoIUP">IUP RETENIDAS</span>
-                    <input type="text" ng-click=""id="html" name="Buscar" class="buscar" required='' placeholder="Buscar">
+                    <input type="text" ng-click="" ng-model="terminoBusqueda" id="html" name="Buscar" class="buscar" required='' placeholder="Buscar">
                     <span class="glyphicon glyphicon-search"></span>
                     <div class="select-btn marco">
                         <div class="prueba">
-                            <!--<label> 
+               
+                            <!--<input type="text" ng-model="seleccion" ng-change="cambiarPlaceholder()" placeholder="{{placeholder}}">
+
+                            <label> 
                                 <input type="checkbox" ng-model="selectAll" ng-change="toggleAll()"> Seleccionar todo 
                             </label>-->
-                            <div ng-repeat="item in items track by $index"> 
+                            <div ng-repeat="item in items | filter:terminoBusqueda track by $index"> 
                                 <input type="checkbox" ng-model="item.checked" ng-click="checkIUP($index)">
                                 {{ item.text }} 
                             </div>

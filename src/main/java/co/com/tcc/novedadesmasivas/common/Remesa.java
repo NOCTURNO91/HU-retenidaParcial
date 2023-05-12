@@ -176,6 +176,7 @@ public class Remesa implements SQLData, Serializable {
     
     private int novedadesRezagos;
     private int seguimientosUltimNovedad;
+ 
 
     public int getSeguimientosUltimNovedad() {
         return seguimientosUltimNovedad;

@@ -1482,6 +1482,9 @@ public class NovedadesDAO implements INovedadesDAO {
 
                       String remeIdInt = rs.getString("REME_ID_INT");
                         remesa.setRemeIdInt(remeIdInt);
+                        
+                      String codigoBarras = rs.getString("CODIGO_BARRAS");
+                        remesa.setCodigoBarras(codigoBarras);
                
 
                         list.add(remesa);

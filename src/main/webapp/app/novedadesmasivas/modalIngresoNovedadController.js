@@ -1,4 +1,4 @@
-/* global Util, conta */
+/* global Util, conta, app, angular */
 
 "use strict";
 angular.module("app.novedadesMasivas")
@@ -481,7 +481,7 @@ function modalIngresoNovedadController($scope, $uibModalInstance, Alert, Novedad
             }
         }
 
-
+        console.log(arrSeguimientos);
         ingresoNovedad.arrSeguimientos = arrSeguimientos;
 
         const filtrarRemesa = [];
@@ -512,7 +512,7 @@ function modalIngresoNovedadController($scope, $uibModalInstance, Alert, Novedad
 
         // Se filtran remesas duplicadas
         ingresoNovedad.arrRemesas = filtrarRemesa;
-
+        console.log(ingresoNovedad.arrRemesas.observaciones+" "+ IUPcomentario);
         Util.mostrarCargando();
         NovedadesMasivasApi.save({action: "grabarNovedades", remeIdInt: null, ipidIdInt: null}, ingresoNovedad).$promise.then(success, error);
     };
@@ -537,11 +537,13 @@ function modalIngresoNovedadController($scope, $uibModalInstance, Alert, Novedad
             item.checked = $scope.selectAll;
         });
     };
-   
+    
+  $scope.terminoBusqueda = '';  
     
     $scope.checkIUP = function(index){
         if($scope.items[index].checked==true){
             $scope.contador = $scope.contador-1
+            $scope.IUPcomentario = $scope.items[index].text
         }else{
             $scope.contador = $scope.contador+1
             if($scope.contador==$scope.items.length){
@@ -549,6 +551,8 @@ function modalIngresoNovedadController($scope, $uibModalInstance, Alert, Novedad
             }
         }
     };
+    
+    
 
     
     $scope._validarObligatorios = function () {
