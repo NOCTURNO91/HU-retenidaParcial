@@ -512,7 +512,12 @@ function modalIngresoNovedadController($scope, $uibModalInstance, Alert, Novedad
 
         // Se filtran remesas duplicadas
         ingresoNovedad.arrRemesas = filtrarRemesa;
-        console.log(ingresoNovedad.arrRemesas.observaciones+" "+ IUPcomentario);
+        for(let i=0; i<$scope.items.length; i++){
+            if($scope.items[i].checked==true){
+                $scope.IUPcomentario = $scope.IUPcomentario+', ' +$scope.items[i].text
+            }
+        }
+        console.log($scope.paramsIngreso.observaciones+" "+ $scope.IUPcomentario);
         Util.mostrarCargando();
         NovedadesMasivasApi.save({action: "grabarNovedades", remeIdInt: null, ipidIdInt: null}, ingresoNovedad).$promise.then(success, error);
     };
@@ -520,7 +525,7 @@ function modalIngresoNovedadController($scope, $uibModalInstance, Alert, Novedad
     
     
     $scope.contador = 0;
-    
+    $scope.IUPcomentario = "";
     $scope.DataIup=['TCCDA000345789','TCCDA000345790','TCCDA000345790'];
     $scope.items = [ {text: 'TCCDA000345789', checked: false}, {text: 'TCCDA000345790', checked: false}, {text: 'TCCDA000345791', checked: false}];
     $scope.toggleAll = function() {
@@ -543,9 +548,9 @@ function modalIngresoNovedadController($scope, $uibModalInstance, Alert, Novedad
     $scope.checkIUP = function(index){
         if($scope.items[index].checked==true){
             $scope.contador = $scope.contador-1
-            $scope.IUPcomentario = $scope.items[index].text
         }else{
             $scope.contador = $scope.contador+1
+            /*$scope.IUPcomentario = $scope.IUPcomentario + ', ' + $scope.items[index].text*/
             if($scope.contador==$scope.items.length){
                 Alert.abrir("No ser\u00E1 posible selecci\u00F3nar la totalidad de las IUP");
             }
